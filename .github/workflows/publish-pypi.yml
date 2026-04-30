@@ -11,13 +11,24 @@ jobs:
     environment: pypi
     permissions:
       id-token: write
+
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install build twine
-      - run: cd packages/plugins && python -m build
-      - uses: pypa/gh-action-pypi-publish@release/v1
+
+      - name: Install build tools
+        run: pip install build twine
+
+      - name: Build package
+        run: |
+          cd plugins
+          python -m build
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          packages-dir: packages/plugins/dist/
+          packages-dir: plugins/dist/

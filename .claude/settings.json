@@ -1,0 +1,8 @@
+{
+  "project": "pdf-autofillr-plugins",
+  "description": "Plugin framework for pdf-autofillr",
+  "primary_language": "python",
+  "package_dir": "packages/plugins",
+  "test_command": "cd packages/plugins && pytest tests/ -v",
+  "install_command": "cd packages/plugins && pip install -e '.[dev]'"
+}

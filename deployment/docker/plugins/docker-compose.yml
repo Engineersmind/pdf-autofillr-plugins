@@ -1,0 +1,5 @@
+version: "3.9"
+services:
+  plugins-test:
+    build: .
+    command: ["pytest", "packages/plugins/tests/", "-v"]

@@ -1,0 +1,3 @@
+# pdf-autofillr-plugins — base requirements
+# Zero runtime dependencies — pure Python!
+# This file is intentionally empty.

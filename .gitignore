@@ -1,0 +1,19 @@
+# pdf-autofillr-plugins — .gitignore
+
+.env
+.env.local
+*.pem *.key
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.eggs/
+.venv/ venv/ env/
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+logs/
+benchmarks/results/*
+!benchmarks/results/.gitkeep

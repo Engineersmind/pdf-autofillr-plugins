@@ -1,0 +1,126 @@
+name: Update Changelog
+
+# Runs when a plugins-v* release tag is pushed.
+# Extracts the version entry from plugins/CHANGELOG.md and
+# prepends it to the root CHANGELOG.md, then commits back to main.
+#
+# FAILS if plugins/CHANGELOG.md does not contain an entry for
+# the version being released — update it before tagging.
+
+on:
+  push:
+    tags:
+      - 'plugins-v*'
+
+jobs:
+  update-changelog:
+    name: Update root CHANGELOG.md
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Resolve version from tag
+        id: resolve
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          V="${TAG#plugins-v}"
+          echo "version=$V"             >> $GITHUB_OUTPUT
+          echo "tag=$TAG"               >> $GITHUB_OUTPUT
+          echo "date=$(date +%Y-%m-%d)" >> $GITHUB_OUTPUT
+
+      - name: Extract entry from plugins/CHANGELOG.md
+        id: extract
+        run: |
+          PKG_CHANGELOG="plugins/CHANGELOG.md"
+          VERSION="${{ steps.resolve.outputs.version }}"
+          TAG="${{ steps.resolve.outputs.tag }}"
+
+          if [[ ! -f "$PKG_CHANGELOG" ]]; then
+            echo "❌ No CHANGELOG.md found at $PKG_CHANGELOG"
+            exit 1
+          fi
+
+          ENTRY=$(awk "/^## \[${VERSION}\]/{found=1; next} found && /^## \[/{exit} found{print}" "$PKG_CHANGELOG")
+
+          if [[ -z "$ENTRY" ]]; then
+            echo ""
+            echo "❌ No entry found for version [${VERSION}] in $PKG_CHANGELOG"
+            echo ""
+            echo "Add a changelog entry before tagging:"
+            echo "  ## [${VERSION}] - $(date +%Y-%m-%d)"
+            echo "  ### Added"
+            echo "  - ..."
+            echo ""
+            echo "Then push the tag again: git tag ${TAG} && git push origin ${TAG}"
+            exit 1
+          fi
+
+          echo "✅ Found entry for [${VERSION}] in $PKG_CHANGELOG"
+          echo "$ENTRY" > /tmp/pkg_entry.txt
+
+      - name: Update root CHANGELOG.md
+        run: |
+          VERSION="${{ steps.resolve.outputs.version }}"
+          DATE="${{ steps.resolve.outputs.date }}"
+          ROOT_CHANGELOG="CHANGELOG.md"
+          HEADER="## [plugins-${VERSION}] — ${DATE}"
+
+          if grep -q "## \[plugins-${VERSION}\]" "$ROOT_CHANGELOG"; then
+            echo "Entry for plugins-${VERSION} already exists — skipping."
+            exit 0
+          fi
+
+          {
+            echo ""
+            echo "$HEADER"
+            echo ""
+            cat /tmp/pkg_entry.txt
+            echo ""
+            echo "---"
+          } > /tmp/new_entry.txt
+
+          INSERT_LINE=$(grep -n "^## \[" "$ROOT_CHANGELOG" | grep -v "Unreleased" | head -1 | cut -d: -f1)
+
+          if [[ -z "$INSERT_LINE" ]]; then
+            cat /tmp/new_entry.txt >> "$ROOT_CHANGELOG"
+          else
+            head -n $((INSERT_LINE - 1)) "$ROOT_CHANGELOG" > /tmp/cl_top.txt
+            tail -n +${INSERT_LINE} "$ROOT_CHANGELOG"      > /tmp/cl_bottom.txt
+            cat /tmp/cl_top.txt /tmp/new_entry.txt /tmp/cl_bottom.txt > "$ROOT_CHANGELOG"
+          fi
+
+          echo "✅ Prepended plugins-${VERSION} to root CHANGELOG.md"
+
+      - name: Update packages table in root CHANGELOG
+        run: |
+          VERSION="${{ steps.resolve.outputs.version }}"
+          sed -i "s/| pdf-autofillr-plugins | [0-9.]* |/| pdf-autofillr-plugins | ${VERSION} |/" CHANGELOG.md
+          echo "✅ Updated packages table: pdf-autofillr-plugins → ${VERSION}"
+
+      - name: Commit updated CHANGELOG
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add CHANGELOG.md
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git commit -m "chore/changelog: update root CHANGELOG for ${{ steps.resolve.outputs.tag }}"
+
+          # Use CHANGELOG_BOT_TOKEN if available, fall back to GITHUB_TOKEN
+          TOKEN="${{ secrets.CHANGELOG_BOT_TOKEN }}"
+          if [[ -z "$TOKEN" ]]; then
+            TOKEN="${{ secrets.GITHUB_TOKEN }}"
+          fi
+          git push https://x-access-token:${TOKEN}@github.com/${{ github.repository }} HEAD:main
+          echo "✅ Committed and pushed CHANGELOG update."

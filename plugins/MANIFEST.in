@@ -1,0 +1,5 @@
+include README.md
+include USAGE.md
+include CHANGELOG.md
+include LICENSE
+recursive-include src/pdf_autofillr_plugins/usage *.md

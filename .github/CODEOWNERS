@@ -1,0 +1,47 @@
+# CODEOWNERS — pdf-autofillr-plugins
+#
+# Each line defines who must review changes to that path.
+# Rules are evaluated top to bottom — last match wins.
+# Docs: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Global fallback — all changes require review from at least one maintainer
+# ──────────────────────────────────────────────────────────────────────────────
+* @EM-ShreyashGondane @EM-RaghavaMahanthi @EM-DewaangMathur
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Plugin package — core source and tests
+# ──────────────────────────────────────────────────────────────────────────────
+/plugins/                  @EM-ShreyashGondane @EM-RaghavaMahanthi @EM-DewaangMathur
+
+# ──────────────────────────────────────────────────────────────────────────────
+# CI/CD and workflows — changes here affect every release and deployment
+# ──────────────────────────────────────────────────────────────────────────────
+/.github/workflows/        @EM-ShreyashGondane @EM-RaghavaMahanthi @EM-DewaangMathur
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Security-sensitive files — require org owner sign-off
+# ──────────────────────────────────────────────────────────────────────────────
+SECURITY.md                @EM-ShreyashGondane @EM-RaghavaMahanthi @EM-DewaangMathur
+/.github/CODEOWNERS        @EM-ShreyashGondane @EM-RaghavaMahanthi @EM-DewaangMathur
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Repo health and governance
+# ──────────────────────────────────────────────────────────────────────────────
+CONTRIBUTING.md            @EM-ShreyashGondane @EM-RaghavaMahanthi @EM-DewaangMathur
+CONTRIBUTING_DEV.md        @EM-ShreyashGondane @EM-RaghavaMahanthi @EM-DewaangMathur
+CHANGELOG.md               @EM-ShreyashGondane @EM-RaghavaMahanthi @EM-DewaangMathur
+LICENSE                    @EM-ShreyashGondane @EM-RaghavaMahanthi @EM-DewaangMathur
+README.md                  @EM-ShreyashGondane @EM-RaghavaMahanthi @EM-DewaangMathur
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Deployment and Docker
+# ──────────────────────────────────────────────────────────────────────────────
+/deployment/               @EM-ShreyashGondane @EM-RaghavaMahanthi @EM-DewaangMathur
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Docs, examples, benchmarks
+# ──────────────────────────────────────────────────────────────────────────────
+/docs/                     @EM-ShreyashGondane @EM-RaghavaMahanthi @EM-DewaangMathur
+/examples/                 @EM-ShreyashGondane @EM-RaghavaMahanthi @EM-DewaangMathur
+/benchmarks/               @EM-ShreyashGondane @EM-RaghavaMahanthi @EM-DewaangMathur

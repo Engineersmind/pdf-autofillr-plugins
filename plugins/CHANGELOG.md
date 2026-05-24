@@ -6,6 +6,18 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Planned
+- `PhoneValidatorPlugin` — E.164 phone number validation
+- `DateValidatorPlugin` — date format and range validation
+- `ConfidenceFilterPlugin` — filters fields below a confidence threshold
+- Plugin dependency resolution
+- Plugin versioning and compatibility checks
+- Plugin hot-reload in development mode
+
+---
+
 ## [0.2.0] - 2026-05-24
 
 ### Added
@@ -54,15 +66,3 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 - Docker deployment configuration
 - GitHub Actions CI (test + PyPI publish)
 - Full docs: `README.md`, `USAGE.md`, `quickstart.md`
-
----
-
-## [Unreleased]
-
-### Planned
-- `PhoneValidatorPlugin` — E.164 phone number validation
-- `DateValidatorPlugin` — date format and range validation
-- `ConfidenceFilterPlugin` — filters fields below a confidence threshold
-- Plugin dependency resolution
-- Plugin versioning and compatibility checks
-- Plugin hot-reload in development mode

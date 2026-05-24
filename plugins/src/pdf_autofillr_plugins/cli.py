@@ -2,7 +2,7 @@
 pdf-autofillr-plugins CLI
 
 Commands:
-    pdf-autofillr-plugins setup     — copy configs/ and usage/ guides to working directory
+    pdf-autofillr-plugins setup     — copy usage/ guides and create .env in working directory
     pdf-autofillr-plugins status    — check module installation and env vars
     pdf-autofillr-plugins list      — list all discovered plugins in a directory
     pdf-autofillr-plugins --version — print version
@@ -126,7 +126,7 @@ def cmd_list(args: argparse.Namespace) -> int:
     paths = [args.path] if args.path else []
 
     if paths:
-        discovered = manager.discover_plugins(paths)
+        discovered = manager.discover_plugins(paths, categories=[args.category] if args.category else None)
         if not discovered or all(len(v) == 0 for v in discovered.values()):
             print(f"\n  No plugins discovered in: {args.path}\n")
             return 0

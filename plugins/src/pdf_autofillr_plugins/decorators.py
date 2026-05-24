@@ -166,21 +166,26 @@ def cache_result(ttl: int = 3600):
     """
     def decorator(func: Callable):
         cache = {}
-        
+
         @wraps(func)
         def wrapper(self, *args, **kwargs):
+            import time
             # Simple cache key from args
             cache_key = str((args, tuple(sorted(kwargs.items()))))
-            
+
             if cache_key in cache:
-                return cache[cache_key]
-            
+                result, timestamp = cache[cache_key]
+                if time.time() - timestamp < ttl:
+                    return result
+                else:
+                    del cache[cache_key]
+
             result = func(self, *args, **kwargs)
-            cache[cache_key] = result
+            cache[cache_key] = (result, time.time())
             return result
-        
+
         wrapper._is_cached = True
         wrapper._cache_ttl = ttl
         return wrapper
-    
+
     return decorator

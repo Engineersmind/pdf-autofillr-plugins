@@ -41,11 +41,10 @@ class PluginRegistry:
         for search_path in search_paths:
             try:
                 # Try as module path first
-                if "." in search_path or not "/" in search_path:
-                    self._discover_from_module(search_path, categories, discovered)
-                else:
-                    # Try as file path
+                if Path(search_path).exists():
                     self._discover_from_path(search_path, categories, discovered)
+                else:
+                    self._discover_from_module(search_path, categories, discovered)
             except Exception as e:
                 print(f"Warning: Failed to discover plugins from {search_path}: {e}")
         

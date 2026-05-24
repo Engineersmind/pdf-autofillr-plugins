@@ -185,4 +185,5 @@ class TestPluginManager:
             "supports",
             return_value=False
         ):
-            pass  # We can't easily patch an instance method here; just ensure no crash
+            result = manager.find_extractor("any_file.pdf")
+            assert result is None

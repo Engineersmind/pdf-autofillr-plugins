@@ -29,14 +29,17 @@ from pdf_autofillr_plugins.utils import (
     truncate_string,
 )
 from pdf_autofillr_plugins.decorators import plugin, requires, cache_result
+
 # from pdf_autofillr_plugins.interfaces import (
 #     ChunkerPlugin, EmbedderPlugin, FillerPlugin, TransformerPlugin,
 #     ValidatorPlugin, ExtractorPlugin, MapperPlugin, PluginMetadata,
 # )
+
 from pdf_autofillr_plugins.interfaces import (
     ChunkerPlugin, EmbedderPlugin, FillerPlugin, TransformerPlugin,
-    ValidatorPlugin, ExtractorPlugin, MapperPlugin, PluginMetadata,
+    ValidatorPlugin, PluginMetadata,
 )
+
 # from pdf_autofillr_plugins.interfaces.base_plugin import BasePlugin
 
 

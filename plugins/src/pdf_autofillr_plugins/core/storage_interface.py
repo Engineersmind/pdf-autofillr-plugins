@@ -6,7 +6,7 @@ Provides a unified interface for S3, Azure Blob Storage, Google Cloud Storage, a
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Optional, Dict, Any, BinaryIO, List
+from typing import Optional, Dict, Any, List
 from enum import Enum
 
 

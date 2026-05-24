@@ -200,7 +200,9 @@ def retry_with_backoff(
             else:
                 logger.error("All %d attempts failed.", max_retries + 1)
 
-    raise last_exc  # type: ignore[misc]
+    if last_exc is not None:
+        raise last_exc
+    raise RuntimeError("retry_with_backoff: all attempts failed with no exception captured")
 
 
 # ── Timer ─────────────────────────────────────────────────────────────────────

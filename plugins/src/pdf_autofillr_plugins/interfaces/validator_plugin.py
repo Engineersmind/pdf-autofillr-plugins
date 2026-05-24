@@ -5,7 +5,7 @@ For custom field validation rules.
 """
 
 from abc import abstractmethod
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, Optional
 from pdf_autofillr_plugins.interfaces.base_plugin import BasePlugin, PluginMetadata
 
 

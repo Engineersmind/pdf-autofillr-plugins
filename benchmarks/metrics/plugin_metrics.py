@@ -5,7 +5,7 @@ Aggregates results from plugin_tasks.py into summary statistics.
 """
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 
 def calculate_throughput(results: List[Dict[str, Any]]) -> Dict[str, float]:

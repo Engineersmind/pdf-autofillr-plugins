@@ -1,7 +1,8 @@
 """Unit tests for PluginRegistry, PluginManager, decorators, and BasePlugin."""
-import pytest
+# import pytest
 from pdf_autofillr_plugins import plugin, PluginManager, PluginRegistry, PluginMetadata
-from pdf_autofillr_plugins.interfaces import ValidatorPlugin, ExtractorPlugin, MapperPlugin
+# from pdf_autofillr_plugins.interfaces import ValidatorPlugin, ExtractorPlugin, MapperPlugin
+from pdf_autofillr_plugins.interfaces import ValidatorPlugin, ExtractorPlugin
 
 
 # ── Decorator ─────────────────────────────────────────────────────────────────
@@ -11,8 +12,8 @@ class TestPluginDecorator:
         @plugin(category="validator", name="test-plugin", version="2.0.0",
                 author="Me", description="A test", tags=["a", "b"], priority=50)
         class Dummy(ValidatorPlugin):
-            def get_metadata(self): ...
-            def validate(self, *a, **kw): ...
+            def get_metadata(self): pass
+            def validate(self, *a, **kw): pass
             def supports_field_type(self, ft): return True
 
         assert Dummy._plugin_category == "validator"
@@ -26,8 +27,8 @@ class TestPluginDecorator:
     def test_decorator_default_name_is_class_name(self):
         @plugin(category="extractor")
         class MyExtractorPlugin(ExtractorPlugin):
-            def get_metadata(self): ...
-            def extract(self, *a, **kw): ...
+            def get_metadata(self): pass
+            def extract(self, *a, **kw): pass
             def supports(self, *a, **kw): return True
 
         assert MyExtractorPlugin._plugin_name == "MyExtractorPlugin"

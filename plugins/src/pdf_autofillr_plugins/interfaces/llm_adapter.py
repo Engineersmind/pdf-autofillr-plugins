@@ -27,7 +27,7 @@ Official adapters (planned):
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from pdf_autofillr_plugins.interfaces.base_plugin import BasePlugin, PluginMetadata
 

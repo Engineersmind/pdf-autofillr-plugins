@@ -9,8 +9,8 @@ And PluginManager.find_llm_adapter / find_output_formatter / find_data_connector
 from __future__ import annotations
 
 import json
-import tempfile
-import os
+# import tempfile
+# import os
 import pytest
 
 from pdf_autofillr_plugins import plugin, PluginManager

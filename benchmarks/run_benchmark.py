@@ -12,7 +12,6 @@ Results are written to benchmarks/results/benchmark_results.json.
 from __future__ import annotations
 
 import json
-import sys
 import time
 import tempfile
 import os

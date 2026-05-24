@@ -5,7 +5,7 @@ For custom data transformation logic.
 """
 
 from abc import abstractmethod
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 from pdf_autofillr_plugins.interfaces.base_plugin import BasePlugin, PluginMetadata
 
 

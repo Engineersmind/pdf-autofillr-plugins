@@ -43,7 +43,7 @@ class TestEmailValidatorPlugin:
         r = validator.validate("email", "test@tempmail.com")
         assert r["valid"] is True  # warnings don't fail
         assert len(r["warnings"]) > 0
-        assert "tempmail.com" in r["warnings"][0]
+        assert r["warnings"][0] == "Disposable email domain detected: tempmail.com"
 
     def test_allowed_domains_rule(self, validator):
         r = validator.validate("email", "user@gmail.com",

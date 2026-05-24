@@ -19,7 +19,7 @@ from __future__ import annotations
 
 import json
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from pdf_autofillr_plugins.decorators import plugin, requires
 from pdf_autofillr_plugins.interfaces import PluginMetadata

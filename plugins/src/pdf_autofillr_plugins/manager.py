@@ -4,13 +4,13 @@ Plugin Manager
 High-level interface for loading and using plugins.
 """
 
-from typing import Dict, List, Optional, Any, Type
+from typing import Dict, List, Optional, Any
 from pdf_autofillr_plugins.registry import PluginRegistry
 from pdf_autofillr_plugins.interfaces.base_plugin import BasePlugin
 from pdf_autofillr_plugins.interfaces.extractor_plugin import ExtractorPlugin
 from pdf_autofillr_plugins.interfaces.mapper_plugin import MapperPlugin
-from pdf_autofillr_plugins.interfaces.validator_plugin import ValidatorPlugin
-from pdf_autofillr_plugins.interfaces.filler_plugin import FillerPlugin
+# from pdf_autofillr_plugins.interfaces.validator_plugin import ValidatorPlugin
+# from pdf_autofillr_plugins.interfaces.filler_plugin import FillerPlugin
 from pdf_autofillr_plugins.interfaces.llm_adapter import LLMAdapter
 from pdf_autofillr_plugins.interfaces.output_formatter import OutputFormatterPlugin
 from pdf_autofillr_plugins.interfaces.data_connector import DataConnectorPlugin

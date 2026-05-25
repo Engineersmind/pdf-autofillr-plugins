@@ -156,7 +156,7 @@ def build_parser() -> argparse.ArgumentParser:
         prog="pdf-autofillr-plugins",
         description=(
             "pdf-autofillr-plugins CLI\n\n"
-            "  setup   Copy configs/ and usage/ guides to working directory\n"
+            "  setup   Copy usage/ guides and create .env in working directory\n"
             "  status  Check module installation and env vars\n"
             "  list    List discovered plugins in a directory\n"
         ),

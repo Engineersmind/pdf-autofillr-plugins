@@ -1,6 +1,6 @@
 # Writing a Plugin
 
-→ For the full guide with all 8 plugin types, see [plugins/USAGE.md](../../plugins/USAGE.md).
+→ For the full guide with all 10 plugin types, see [plugins/USAGE.md](../../plugins/USAGE.md).
 
 ## Minimum structure
 
@@ -57,6 +57,9 @@ class MyValidator(ValidatorPlugin):
 | `ChunkerPlugin` | `chunk()` |
 | `EmbedderPlugin` | `embed()`, `check()` |
 | `TransformerPlugin` | `transform()`, `supports_type()` |
+| `LLMAdapter` | `map_fields()`, `embed()` |
+| `OutputFormatterPlugin` | `format()` |
+| `DataConnectorPlugin` | `fetch()` |
 
 ## Configuration
 

@@ -1,3 +1,3 @@
 # Financial Dataset
 
-Add test PDFs to , expected results to , and schema definitions to .
+Add test PDFs to `pdfs/`, expected results to `ground_truth/`, and schema definitions to `schema_keys/`.

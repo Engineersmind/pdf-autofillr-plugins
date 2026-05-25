@@ -33,6 +33,8 @@ class DateNormalizerPlugin(TransformerPlugin):
 ## Use it
 
 ```python
+from pdf_autofillr_plugins import PluginManager
+
 manager = PluginManager()
 manager.discover_plugins(["my_plugins/"])
 

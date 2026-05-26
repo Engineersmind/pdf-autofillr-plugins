@@ -1,0 +1,8 @@
+# pdf-autofillr-plugins — development requirements
+# Install with: pip install "pdf-autofillr-plugins[dev]"
+pytest>=7.0.0
+pytest-cov>=4.0.0
+black>=23.0.0
+isort>=5.12.0
+mypy>=1.0.0
+ruff>=0.4.0

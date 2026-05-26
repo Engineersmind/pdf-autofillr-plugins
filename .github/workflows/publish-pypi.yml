@@ -1,0 +1,77 @@
+name: Publish to PyPI
+
+# Tag format → Package:
+#   plugins-v0.2.0  → pdf-autofillr-plugins  (plugins/)
+#
+# Release steps:
+#   1. Bump version in plugins/pyproject.toml and plugins/src/pdf_autofillr_plugins/__init__.py
+#   2. Update plugins/CHANGELOG.md
+#   3. Merge to main
+#   4. git tag plugins-v0.2.0 && git push origin plugins-v0.2.0
+#
+# Uses PyPI Trusted Publishing (OIDC) — no token needed.
+# Set up at https://pypi.org/manage/account/publishing/
+
+on:
+  push:
+    tags:
+      - 'plugins-v*'
+
+jobs:
+  test:
+    name: Test / Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+    defaults:
+      run:
+        working-directory: plugins
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - run: pip install -e ".[dev]"
+      - run: pytest tests/ --tb=short -q
+
+  build:
+    name: Build pdf-autofillr-plugins
+    runs-on: ubuntu-latest
+    needs: test
+    defaults:
+      run:
+        working-directory: plugins
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Verify version matches tag
+        run: |
+          PKG=$(python -c "import tomllib,pathlib; print(tomllib.loads(pathlib.Path('pyproject.toml').read_text())['project']['version'])")
+          TAG="${GITHUB_REF_NAME#plugins-v}"
+          echo "Tag=$TAG pyproject=$PKG"
+          [ "$TAG" = "$PKG" ] || (echo "Version mismatch — bump pyproject.toml and __init__.py before tagging" && exit 1)
+      - run: pip install build && python -m build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist-pdf-autofillr-plugins
+          path: plugins/dist/
+
+  publish:
+    name: Publish pdf-autofillr-plugins
+    runs-on: ubuntu-latest
+    needs: build
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist-pdf-autofillr-plugins
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist/

@@ -1,0 +1,31 @@
+version: 2
+updates:
+
+  # ── Python dependencies ───────────────────────────────────────────
+  - package-ecosystem: "pip"
+    directory: "/plugins"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    labels: ["dependencies", "plugins"]
+    open-pull-requests-limit: 5
+    groups:
+      all-dependencies:
+        patterns:
+          - "*"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-minor", "version-update:semver-patch"]
+
+  # ── GitHub Actions ────────────────────────────────────────────────
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    labels: ["dependencies", "github-actions"]
+    open-pull-requests-limit: 5
+    groups:
+      all-dependencies:
+        patterns:
+          - "*"

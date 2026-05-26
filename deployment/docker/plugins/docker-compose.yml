@@ -1,0 +1,7 @@
+version: "3.9"
+services:
+  plugins-test:
+    build:
+      context: ../../..
+      dockerfile: deployment/docker/plugins/Dockerfile
+    command: ["pytest", "plugins/tests/", "-v", "--tb=short"]

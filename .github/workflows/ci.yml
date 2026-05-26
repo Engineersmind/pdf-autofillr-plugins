@@ -26,6 +26,9 @@ jobs:
       - name: Install dev dependencies
         run: pip install -e ".[dev]"
 
+      - name: Convert line endings to LF
+        run: find src/ tests/ -name "*.py" -exec sed -i 's/\r//' {} +
+
       - name: Ruff lint
         run: ruff check src/ tests/
 

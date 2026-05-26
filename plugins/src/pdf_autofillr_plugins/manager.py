@@ -29,7 +29,7 @@ class PluginManager:
         self,
         plugin_paths: Optional[List[str]] = None,
         enabled_plugins: Optional[List[str]] = None,
-        lazy_load: bool = True
+        lazy_load: bool = True,
     ):
         """
         Initialize plugin manager.
@@ -49,9 +49,7 @@ class PluginManager:
             self.discover_plugins(plugin_paths)
 
     def discover_plugins(
-        self,
-        search_paths: List[str],
-        categories: Optional[List[str]] = None
+        self, search_paths: List[str], categories: Optional[List[str]] = None
     ) -> Dict[str, List[str]]:
         """
         Discover and register plugins.
@@ -74,10 +72,7 @@ class PluginManager:
         return discovered
 
     def load_plugin(
-        self,
-        name: str,
-        category: Optional[str] = None,
-        config: Optional[Dict[str, Any]] = None
+        self, name: str, category: Optional[str] = None, config: Optional[Dict[str, Any]] = None
     ) -> Optional[BasePlugin]:
         """
         Load and initialize a plugin.
@@ -120,11 +115,7 @@ class PluginManager:
             print(f"Error loading plugin {name}: {e}")
             return None
 
-    def get_plugin(
-        self,
-        name: str,
-        category: Optional[str] = None
-    ) -> Optional[BasePlugin]:
+    def get_plugin(self, name: str, category: Optional[str] = None) -> Optional[BasePlugin]:
         """
         Get a loaded plugin instance.
 
@@ -146,11 +137,7 @@ class PluginManager:
 
         return None
 
-    def find_extractor(
-        self,
-        pdf_path: str,
-        **kwargs
-    ) -> Optional[ExtractorPlugin]:
+    def find_extractor(self, pdf_path: str, **kwargs) -> Optional[ExtractorPlugin]:
         """
         Find the best extractor plugin for a PDF.
 
@@ -188,11 +175,7 @@ class PluginManager:
 
         return None
 
-    def find_mapper(
-        self,
-        schema: Dict[str, Any],
-        **kwargs
-    ) -> Optional[MapperPlugin]:
+    def find_mapper(self, schema: Dict[str, Any], **kwargs) -> Optional[MapperPlugin]:
         """
         Find the best mapper plugin for a schema.
 
@@ -240,9 +223,7 @@ class PluginManager:
         return self.registry.list_plugins(category)
 
     def get_plugin_info(
-        self,
-        name: str,
-        category: Optional[str] = None
+        self, name: str, category: Optional[str] = None
     ) -> Optional[Dict[str, Any]]:
         """
         Get plugin metadata.
@@ -271,12 +252,7 @@ class PluginManager:
             plugin.shutdown()
             del self._instances[instance_key]
 
-
-    def find_llm_adapter(
-        self,
-        model_name: str = "",
-        **kwargs
-    ):
+    def find_llm_adapter(self, model_name: str = "", **kwargs):
         """
         Find the best LLM adapter for a given model name.
 
@@ -310,11 +286,7 @@ class PluginManager:
 
         return None
 
-    def find_output_formatter(
-        self,
-        format_name: str = "",
-        **kwargs
-    ):
+    def find_output_formatter(self, format_name: str = "", **kwargs):
         """
         Find the best output formatter for a given format name.
 
@@ -348,11 +320,7 @@ class PluginManager:
 
         return None
 
-    def find_data_connector(
-        self,
-        source_name: str = "",
-        **kwargs
-    ):
+    def find_data_connector(self, source_name: str = "", **kwargs):
         """
         Find the best data connector for a given source name.
 

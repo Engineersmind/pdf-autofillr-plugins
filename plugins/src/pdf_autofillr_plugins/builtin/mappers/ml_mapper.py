@@ -7,6 +7,7 @@ In production, swap _predict_target_field() for a real embedding-based lookup.
 
 Registered under category="mapper", name="ml-mapper".
 """
+
 from __future__ import annotations
 
 from typing import Any, Dict, List, Optional
@@ -18,29 +19,29 @@ from pdf_autofillr_plugins.interfaces import MapperPlugin, PluginMetadata
 # canonical target names. Extend via config["synonyms"].
 _DEFAULT_SYNONYMS: Dict[str, str] = {
     "first_name": "firstName",
-    "firstname":  "firstName",
-    "fname":      "firstName",
-    "last_name":  "lastName",
-    "lastname":   "lastName",
-    "lname":      "lastName",
-    "email":      "emailAddress",
+    "firstname": "firstName",
+    "fname": "firstName",
+    "last_name": "lastName",
+    "lastname": "lastName",
+    "lname": "lastName",
+    "email": "emailAddress",
     "email_address": "emailAddress",
-    "e_mail":     "emailAddress",
-    "phone":      "phoneNumber",
-    "telephone":  "phoneNumber",
-    "mobile":     "phoneNumber",
+    "e_mail": "emailAddress",
+    "phone": "phoneNumber",
+    "telephone": "phoneNumber",
+    "mobile": "phoneNumber",
     "phone_number": "phoneNumber",
     "invoice_number": "invoiceNo",
     "invoice_no": "invoiceNo",
     "inv_number": "invoiceNo",
     "invoice_date": "invoiceDate",
-    "date":       "invoiceDate",
-    "total":      "totalAmount",
+    "date": "invoiceDate",
+    "total": "totalAmount",
     "total_amount": "totalAmount",
-    "amount":     "totalAmount",
-    "vendor":     "vendorName",
+    "amount": "totalAmount",
+    "vendor": "vendorName",
     "vendor_name": "vendorName",
-    "supplier":   "vendorName",
+    "supplier": "vendorName",
 }
 
 
@@ -50,7 +51,7 @@ _DEFAULT_SYNONYMS: Dict[str, str] = {
     version="1.0.0",
     author="PDF AutoFillr Team",
     description="Fuzzy synonym mapper — maps fields via a configurable keyword table. "
-                "Swap _predict_target_field() for real ML embeddings in production.",
+    "Swap _predict_target_field() for real ML embeddings in production.",
     tags=["ml", "fuzzy", "synonym", "builtin"],
     priority=150,  # above identity-mapper (100), below custom ML mappers
 )
@@ -109,12 +110,14 @@ class MLMapperPlugin(MapperPlugin):
 
             if target:
                 mapped[target] = value
-                mapping_info.append({
-                    "source": name,
-                    "target": target,
-                    "confidence": self._confidence,
-                    "method": "ml-synonym",
-                })
+                mapping_info.append(
+                    {
+                        "source": name,
+                        "target": target,
+                        "confidence": self._confidence,
+                        "method": "ml-synonym",
+                    }
+                )
             else:
                 unmapped.append(name)
 

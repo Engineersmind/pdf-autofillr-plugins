@@ -1,4 +1,5 @@
 """Unit tests for PluginRegistry, PluginManager, decorators, and BasePlugin."""
+
 # import pytest
 from pdf_autofillr_plugins import PluginManager, PluginMetadata, PluginRegistry, plugin
 
@@ -7,14 +8,27 @@ from pdf_autofillr_plugins.interfaces import ExtractorPlugin, ValidatorPlugin
 
 # ── Decorator ─────────────────────────────────────────────────────────────────
 
+
 class TestPluginDecorator:
     def test_decorator_sets_metadata_attrs(self):
-        @plugin(category="validator", name="test-plugin", version="2.0.0",
-                author="Me", description="A test", tags=["a", "b"], priority=50)
+        @plugin(
+            category="validator",
+            name="test-plugin",
+            version="2.0.0",
+            author="Me",
+            description="A test",
+            tags=["a", "b"],
+            priority=50,
+        )
         class Dummy(ValidatorPlugin):
-            def get_metadata(self): pass
-            def validate(self, *a, **kw): pass
-            def supports_field_type(self, ft): return True
+            def get_metadata(self):
+                pass
+
+            def validate(self, *a, **kw):
+                pass
+
+            def supports_field_type(self, ft):
+                return True
 
         assert Dummy._plugin_category == "validator"
         assert Dummy._plugin_name == "test-plugin"
@@ -27,9 +41,14 @@ class TestPluginDecorator:
     def test_decorator_default_name_is_class_name(self):
         @plugin(category="extractor")
         class MyExtractorPlugin(ExtractorPlugin):
-            def get_metadata(self): pass
-            def extract(self, *a, **kw): pass
-            def supports(self, *a, **kw): return True
+            def get_metadata(self):
+                pass
+
+            def extract(self, *a, **kw):
+                pass
+
+            def supports(self, *a, **kw):
+                return True
 
         assert MyExtractorPlugin._plugin_name == "MyExtractorPlugin"
 
@@ -37,17 +56,26 @@ class TestPluginDecorator:
         @plugin(category="validator", name="inst-test")
         class InstValidator(ValidatorPlugin):
             def get_metadata(self):
-                return PluginMetadata(name="inst-test", version="1.0", author="T",
-                                      description="", category="validator")
+                return PluginMetadata(
+                    name="inst-test",
+                    version="1.0",
+                    author="T",
+                    description="",
+                    category="validator",
+                )
+
             def validate(self, name, value, rules=None, **kw):
                 return {"valid": True, "errors": [], "warnings": [], "validator": "inst-test"}
-            def supports_field_type(self, ft): return True
+
+            def supports_field_type(self, ft):
+                return True
 
         v = InstValidator()
         assert v.name == "inst-test"
 
 
 # ── PluginRegistry ────────────────────────────────────────────────────────────
+
 
 class TestPluginRegistry:
     def test_register_and_get(self, registry):
@@ -110,6 +138,7 @@ class FilePlugin(ValidatorPlugin):
 
 
 # ── PluginManager ─────────────────────────────────────────────────────────────
+
 
 class TestPluginManager:
     def test_load_plugin(self, manager):
@@ -180,10 +209,11 @@ class TestPluginManager:
     def test_find_extractor_returns_none_when_none_match(self, manager):
         # Override supports() to always return False
         from unittest.mock import patch
+
         with patch.object(
             manager.registry.get_plugin_class("noop-extractor", "extractor"),
             "supports",
-            return_value=False
+            return_value=False,
         ):
             result = manager.find_extractor("any_file.pdf")
             assert result is None

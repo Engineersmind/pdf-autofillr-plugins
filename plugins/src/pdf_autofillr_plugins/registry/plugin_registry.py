@@ -23,9 +23,7 @@ class PluginRegistry:
         self._instances: Dict[str, BasePlugin] = {}
 
     def discover_plugins(
-        self,
-        search_paths: List[str],
-        categories: Optional[List[str]] = None
+        self, search_paths: List[str], categories: Optional[List[str]] = None
     ) -> Dict[str, List[str]]:
         """
         Discover plugins from specified paths.
@@ -52,10 +50,7 @@ class PluginRegistry:
         return discovered
 
     def _discover_from_module(
-        self,
-        module_path: str,
-        categories: Optional[List[str]],
-        discovered: Dict[str, List[str]]
+        self, module_path: str, categories: Optional[List[str]], discovered: Dict[str, List[str]]
     ):
         """Discover plugins from a Python module"""
         try:
@@ -80,10 +75,7 @@ class PluginRegistry:
             self._scan_module_for_plugins(module, categories, discovered)
 
     def _discover_from_path(
-        self,
-        dir_path: str,
-        categories: Optional[List[str]],
-        discovered: Dict[str, List[str]]
+        self, dir_path: str, categories: Optional[List[str]], discovered: Dict[str, List[str]]
     ):
         """Discover plugins from a file system path"""
         path = Path(dir_path)
@@ -107,10 +99,7 @@ class PluginRegistry:
                 print(f"Warning: Failed to load {py_file}: {e}")
 
     def _scan_module_for_plugins(
-        self,
-        module,
-        categories: Optional[List[str]],
-        discovered: Dict[str, List[str]]
+        self, module, categories: Optional[List[str]], discovered: Dict[str, List[str]]
     ):
         """Scan a module for plugin classes"""
         for name, obj in inspect.getmembers(module, inspect.isclass):
@@ -138,10 +127,7 @@ class PluginRegistry:
                 discovered[category].append(plugin_name)
 
     def register_plugin(
-        self,
-        plugin_class: Type[BasePlugin],
-        category: str,
-        name: Optional[str] = None
+        self, plugin_class: Type[BasePlugin], category: str, name: Optional[str] = None
     ):
         """
         Manually register a plugin class.
@@ -159,9 +145,7 @@ class PluginRegistry:
         self._plugins[category][plugin_name] = plugin_class
 
     def get_plugin_class(
-        self,
-        name: str,
-        category: Optional[str] = None
+        self, name: str, category: Optional[str] = None
     ) -> Optional[Type[BasePlugin]]:
         """
         Get plugin class by name.
@@ -196,15 +180,10 @@ class PluginRegistry:
         if category:
             return {category: list(self._plugins.get(category, {}).keys())}
 
-        return {
-            cat: list(plugins.keys())
-            for cat, plugins in self._plugins.items()
-        }
+        return {cat: list(plugins.keys()) for cat, plugins in self._plugins.items()}
 
     def get_plugin_info(
-        self,
-        name: str,
-        category: Optional[str] = None
+        self, name: str, category: Optional[str] = None
     ) -> Optional[Dict[str, Any]]:
         """
         Get plugin metadata.

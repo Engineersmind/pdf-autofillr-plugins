@@ -12,6 +12,7 @@ from typing import Any, Dict, List, Optional
 
 class StorageProvider(Enum):
     """Supported storage providers."""
+
     AWS_S3 = "aws"
     AZURE_BLOB = "azure"
     GCP_STORAGE = "gcp"
@@ -64,10 +65,7 @@ class StorageInterface(ABC):
 
     @abstractmethod
     def upload_file(
-        self,
-        file_path: str,
-        key: str,
-        metadata: Optional[Dict[str, str]] = None
+        self, file_path: str, key: str, metadata: Optional[Dict[str, str]] = None
     ) -> str:
         """
         Upload a file to storage.
@@ -83,12 +81,7 @@ class StorageInterface(ABC):
         pass
 
     @abstractmethod
-    def upload_bytes(
-        self,
-        data: bytes,
-        key: str,
-        metadata: Optional[Dict[str, str]] = None
-    ) -> str:
+    def upload_bytes(self, data: bytes, key: str, metadata: Optional[Dict[str, str]] = None) -> str:
         """
         Upload bytes to storage.
 
@@ -103,11 +96,7 @@ class StorageInterface(ABC):
         pass
 
     @abstractmethod
-    def download_file(
-        self,
-        key: str,
-        local_path: str
-    ) -> str:
+    def download_file(self, key: str, local_path: str) -> str:
         """
         Download a file from storage.
 
@@ -134,11 +123,7 @@ class StorageInterface(ABC):
         pass
 
     @abstractmethod
-    def get_download_url(
-        self,
-        key: str,
-        expiration: int = 3600
-    ) -> str:
+    def get_download_url(self, key: str, expiration: int = 3600) -> str:
         """
         Get a presigned/temporary download URL.
 
@@ -152,11 +137,7 @@ class StorageInterface(ABC):
         pass
 
     @abstractmethod
-    def get_upload_url(
-        self,
-        key: str,
-        expiration: int = 3600
-    ) -> str:
+    def get_upload_url(self, key: str, expiration: int = 3600) -> str:
         """
         Get a presigned/temporary upload URL.
 
@@ -197,9 +178,7 @@ class StorageInterface(ABC):
 
     @abstractmethod
     def list_files(
-        self,
-        prefix: Optional[str] = None,
-        max_results: Optional[int] = None
+        self, prefix: Optional[str] = None, max_results: Optional[int] = None
     ) -> List[str]:
         """
         List files in storage.
@@ -227,11 +206,7 @@ class StorageInterface(ABC):
         pass
 
     @abstractmethod
-    def copy_file(
-        self,
-        source_key: str,
-        dest_key: str
-    ) -> str:
+    def copy_file(self, source_key: str, dest_key: str) -> str:
         """
         Copy a file within storage.
 
@@ -248,6 +223,7 @@ class StorageInterface(ABC):
 # =============================================================================
 # Factory Pattern for Storage
 # =============================================================================
+
 
 def create_storage(config: StorageConfig) -> StorageInterface:
     """

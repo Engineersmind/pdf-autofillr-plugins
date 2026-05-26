@@ -15,6 +15,7 @@ Config options:
     max_tokens (int):  Max tokens per request (default 500)
     timeout (int):     Request timeout in seconds (default 30)
 """
+
 from __future__ import annotations
 
 import json
@@ -123,6 +124,7 @@ class LiteLLMAdapter(LLMAdapter):
 
         try:
             import litellm
+
             kwargs: Dict[str, Any] = {
                 "model": self._model,
                 "messages": [{"role": "user", "content": prompt}],

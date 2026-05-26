@@ -13,6 +13,7 @@ Sir's original vision::
             # Pull contact data from Salesforce
             ...
 """
+
 from __future__ import annotations
 
 from abc import abstractmethod

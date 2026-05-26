@@ -4,6 +4,7 @@ Built-in: EmailValidatorPlugin
 Validates email address fields.
 Registered automatically under category="validator", name="email-validator".
 """
+
 from __future__ import annotations
 
 import re
@@ -38,8 +39,12 @@ class EmailValidatorPlugin(ValidatorPlugin):
     _EMAIL_RE = re.compile(r"^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$")
 
     _DISPOSABLE = {
-        "tempmail.com", "throwaway.email", "guerrillamail.com",
-        "mailinator.com", "yopmail.com", "sharklasers.com",
+        "tempmail.com",
+        "throwaway.email",
+        "guerrillamail.com",
+        "mailinator.com",
+        "yopmail.com",
+        "sharklasers.com",
     }
 
     _PERSONAL = {"gmail.com", "yahoo.com", "hotmail.com", "outlook.com", "icloud.com"}

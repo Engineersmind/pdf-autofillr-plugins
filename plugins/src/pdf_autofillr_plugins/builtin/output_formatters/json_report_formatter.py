@@ -14,6 +14,7 @@ This is the output formatter Sir described in the original README::
 
 Registered under category="output_formatter", name="json-report".
 """
+
 from __future__ import annotations
 
 import base64

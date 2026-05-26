@@ -17,7 +17,7 @@ def plugin(
     tags: Optional[list] = None,
     enabled: bool = True,
     priority: int = 100,
-    config_schema: Optional[Dict[str, Any]] = None
+    config_schema: Optional[Dict[str, Any]] = None,
 ):
     """
     Decorator to register a class as a plugin.
@@ -38,6 +38,7 @@ def plugin(
         priority: Plugin priority (higher = loaded first)
         config_schema: Configuration schema
     """
+
     def decorator(cls):
         # Store metadata on class
         cls._plugin_category = category
@@ -68,9 +69,11 @@ def requires(*dependencies: str):
     Args:
         *dependencies: Required package names
     """
+
     def decorator(cls):
         cls._plugin_dependencies = list(dependencies)
         return cls
+
     return decorator
 
 
@@ -90,6 +93,7 @@ def validates_config(validator_func: Callable):
     Args:
         validator_func: Function that takes config dict and returns bool
     """
+
     @wraps(validator_func)
     def wrapper(config: Dict[str, Any]) -> bool:
         return validator_func(config)
@@ -164,12 +168,14 @@ def cache_result(ttl: int = 3600):
     Args:
         ttl: Time-to-live in seconds
     """
+
     def decorator(func: Callable):
         cache = {}
 
         @wraps(func)
         def wrapper(self, *args, **kwargs):
             import time
+
             # Simple cache key from args
             cache_key = str((args, tuple(sorted(kwargs.items()))))
 

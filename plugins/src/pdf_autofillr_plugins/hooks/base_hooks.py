@@ -271,10 +271,10 @@ class HookRegistry:
     def list_hooks(self) -> Dict[str, List[str]]:
         """Return a summary of all registered hooks by type."""
         return {
-            "pre_extract":  [h.name for h in self._pre_extract],
+            "pre_extract": [h.name for h in self._pre_extract],
             "post_extract": [h.name for h in self._post_extract],
-            "pre_fill":     [h.name for h in self._pre_fill],
-            "post_fill":    [h.name for h in self._post_fill],
+            "pre_fill": [h.name for h in self._pre_fill],
+            "post_fill": [h.name for h in self._post_fill],
         }
 
     def clear(self) -> None:

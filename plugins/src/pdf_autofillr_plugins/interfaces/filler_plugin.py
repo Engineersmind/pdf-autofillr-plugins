@@ -19,11 +19,7 @@ class FillerPlugin(BasePlugin):
 
     @abstractmethod
     def fill(
-        self,
-        pdf_path: str,
-        data: Dict[str, Any],
-        output_path: Optional[str] = None,
-        **kwargs
+        self, pdf_path: str, data: Dict[str, Any], output_path: Optional[str] = None, **kwargs
     ) -> Dict[str, Any]:
         """
         Fill PDF with data.
@@ -70,11 +66,7 @@ class FillerPlugin(BasePlugin):
         """
         return []
 
-    def validate_data(
-        self,
-        pdf_path: str,
-        data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    def validate_data(self, pdf_path: str, data: Dict[str, Any]) -> Dict[str, Any]:
         """
         Validate that data can fill the PDF.
 
@@ -94,5 +86,5 @@ class FillerPlugin(BasePlugin):
             version="1.0.0",
             author="Unknown",
             description="Custom PDF filler",
-            category="filler"
+            category="filler",
         )

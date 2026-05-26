@@ -13,6 +13,7 @@ from typing import Any, Dict, List, Optional
 
 class OperationStatus(Enum):
     """Status of an operation."""
+
     SUCCESS = "success"
     FAILURE = "failure"
     PENDING = "pending"
@@ -123,7 +124,7 @@ class HandlerResponse:
         data: Optional[Dict[str, Any]] = None,
         operation: Optional[str] = None,
         session_id: Optional[str] = None,
-        **kwargs
+        **kwargs,
     ) -> "HandlerResponse":
         """Create a success response."""
         return cls(
@@ -132,7 +133,7 @@ class HandlerResponse:
             data=data,
             operation=operation,
             session_id=session_id,
-            **kwargs
+            **kwargs,
         )
 
     @classmethod
@@ -142,7 +143,7 @@ class HandlerResponse:
         error_type: Optional[str] = None,
         operation: Optional[str] = None,
         session_id: Optional[str] = None,
-        **kwargs
+        **kwargs,
     ) -> "HandlerResponse":
         """Create an error response."""
         return cls(
@@ -152,7 +153,7 @@ class HandlerResponse:
             error_type=error_type,
             operation=operation,
             session_id=session_id,
-            **kwargs
+            **kwargs,
         )
 
 
@@ -209,6 +210,7 @@ class HandlerInterface(ABC):
 # Base Handler Implementation
 # =============================================================================
 
+
 class BaseHandler(HandlerInterface):
     """
     Base handler with common functionality.
@@ -257,7 +259,7 @@ class BaseHandler(HandlerInterface):
                 error_type=type(e).__name__,
                 operation=request.operation,
                 session_id=request.session_id,
-                duration_ms=duration_ms
+                duration_ms=duration_ms,
             )
 
     @abstractmethod

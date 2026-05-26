@@ -19,10 +19,7 @@ class ChunkerPlugin(BasePlugin):
 
     @abstractmethod
     def chunk(
-        self,
-        pdf_path: str,
-        chunk_size: Optional[int] = None,
-        **kwargs
+        self, pdf_path: str, chunk_size: Optional[int] = None, **kwargs
     ) -> List[Dict[str, Any]]:
         """
         Chunk PDF into logical segments.
@@ -77,5 +74,5 @@ class ChunkerPlugin(BasePlugin):
             version="1.0.0",
             author="Unknown",
             description="Custom PDF chunker",
-            category="chunker"
+            category="chunker",
         )

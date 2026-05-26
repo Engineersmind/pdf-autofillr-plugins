@@ -19,11 +19,7 @@ class ValidatorPlugin(BasePlugin):
 
     @abstractmethod
     def validate(
-        self,
-        field_name: str,
-        field_value: Any,
-        rules: Optional[Dict[str, Any]] = None,
-        **kwargs
+        self, field_name: str, field_value: Any, rules: Optional[Dict[str, Any]] = None, **kwargs
     ) -> Dict[str, Any]:
         """
         Validate field value.
@@ -68,9 +64,7 @@ class ValidatorPlugin(BasePlugin):
         return {}
 
     def validate_batch(
-        self,
-        fields: Dict[str, Any],
-        rules: Optional[Dict[str, Any]] = None
+        self, fields: Dict[str, Any], rules: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
         """
         Validate multiple fields at once.
@@ -94,5 +88,5 @@ class ValidatorPlugin(BasePlugin):
             version="1.0.0",
             author="Unknown",
             description="Custom field validator",
-            category="validator"
+            category="validator",
         )

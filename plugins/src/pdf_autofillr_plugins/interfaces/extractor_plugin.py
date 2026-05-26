@@ -18,12 +18,7 @@ class ExtractorPlugin(BasePlugin):
     """
 
     @abstractmethod
-    def extract(
-        self,
-        pdf_path: str,
-        strategy: Optional[str] = None,
-        **kwargs
-    ) -> Dict[str, Any]:
+    def extract(self, pdf_path: str, strategy: Optional[str] = None, **kwargs) -> Dict[str, Any]:
         """
         Extract fields from PDF.
 
@@ -85,7 +80,7 @@ class ExtractorPlugin(BasePlugin):
             version="1.0.0",
             author="Unknown",
             description="Custom PDF extractor",
-            category="extractor"
+            category="extractor",
         )
 
 
@@ -97,7 +92,7 @@ class ExtractorResult:
         fields: List[Dict[str, Any]],
         metadata: Optional[Dict[str, Any]] = None,
         extractor: Optional[str] = None,
-        confidence: Optional[float] = None
+        confidence: Optional[float] = None,
     ):
         self.fields = fields
         self.metadata = metadata or {}

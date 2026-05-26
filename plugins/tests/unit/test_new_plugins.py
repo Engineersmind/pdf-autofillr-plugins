@@ -1,10 +1,12 @@
 """Unit tests for MLMapperPlugin, InvoiceExtractorPlugin, and CLI commands."""
+
 import pytest
 
 from pdf_autofillr_plugins.builtin.extractors.invoice_extractor import InvoiceExtractorPlugin
 from pdf_autofillr_plugins.builtin.mappers.ml_mapper import MLMapperPlugin
 
 # ── MLMapperPlugin ────────────────────────────────────────────────────────────
+
 
 class TestMLMapperPlugin:
     @pytest.fixture
@@ -66,6 +68,7 @@ class TestMLMapperPlugin:
 
 # ── InvoiceExtractorPlugin ────────────────────────────────────────────────────
 
+
 class TestInvoiceExtractorPlugin:
     @pytest.fixture
     def extractor(self):
@@ -120,18 +123,22 @@ class TestInvoiceExtractorPlugin:
 
 # ── CLI entry point ───────────────────────────────────────────────────────────
 
+
 class TestCLI:
     def test_version_import(self):
         from pdf_autofillr_plugins import __version__
+
         assert __version__ == "0.2.0"
 
     def test_cli_module_importable(self):
         from pdf_autofillr_plugins.cli import build_parser
+
         parser = build_parser()
         assert parser is not None
 
     def test_cli_has_setup_subcommand(self):
         from pdf_autofillr_plugins.cli import build_parser
+
         parser = build_parser()
         # Parse setup — should not raise
         args = parser.parse_args(["setup"])
@@ -139,12 +146,14 @@ class TestCLI:
 
     def test_cli_has_status_subcommand(self):
         from pdf_autofillr_plugins.cli import build_parser
+
         parser = build_parser()
         args = parser.parse_args(["status"])
         assert args.command == "status"
 
     def test_cli_has_list_subcommand(self):
         from pdf_autofillr_plugins.cli import build_parser
+
         parser = build_parser()
         args = parser.parse_args(["list", "--path", "./my_plugins"])
         assert args.command == "list"

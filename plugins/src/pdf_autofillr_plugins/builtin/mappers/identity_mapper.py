@@ -5,6 +5,7 @@ Maps fields by matching extracted field names directly to schema keys (exact mat
 then snake_case normalisation). Useful as a baseline mapper and for testing.
 Registered under category="mapper", name="identity-mapper".
 """
+
 from __future__ import annotations
 
 import re
@@ -73,7 +74,9 @@ class IdentityMapperPlugin(MapperPlugin):
             # 1. Exact match
             if name in schema_keys:
                 mapped[name] = value
-                mapping_info.append({"source": name, "target": name, "method": "exact", "confidence": confidence})
+                mapping_info.append(
+                    {"source": name, "target": name, "method": "exact", "confidence": confidence}
+                )
                 continue
 
             # 2. Snake-case match
@@ -81,13 +84,27 @@ class IdentityMapperPlugin(MapperPlugin):
             if snake in snake_index:
                 target = snake_index[snake]
                 mapped[target] = value
-                mapping_info.append({"source": name, "target": target, "method": "snake_case", "confidence": confidence * 0.9})
+                mapping_info.append(
+                    {
+                        "source": name,
+                        "target": target,
+                        "method": "snake_case",
+                        "confidence": confidence * 0.9,
+                    }
+                )
                 continue
 
             # 3. No schema — pass through as-is
             if not schema_keys:
                 mapped[name] = value
-                mapping_info.append({"source": name, "target": name, "method": "passthrough", "confidence": confidence})
+                mapping_info.append(
+                    {
+                        "source": name,
+                        "target": name,
+                        "method": "passthrough",
+                        "confidence": confidence,
+                    }
+                )
                 continue
 
             unmapped.append(name)

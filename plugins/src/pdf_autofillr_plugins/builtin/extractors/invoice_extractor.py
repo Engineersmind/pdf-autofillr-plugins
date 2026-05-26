@@ -7,6 +7,7 @@ body with real PyMuPDF / pdfplumber parsing.
 
 Registered under category="extractor", name="invoice-extractor".
 """
+
 from __future__ import annotations
 
 from typing import Any, Dict, List, Optional

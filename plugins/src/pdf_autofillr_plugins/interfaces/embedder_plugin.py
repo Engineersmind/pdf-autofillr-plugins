@@ -19,11 +19,7 @@ class EmbedderPlugin(BasePlugin):
 
     @abstractmethod
     def embed(
-        self,
-        pdf_path: str,
-        metadata: Dict[str, Any],
-        output_path: Optional[str] = None,
-        **kwargs
+        self, pdf_path: str, metadata: Dict[str, Any], output_path: Optional[str] = None, **kwargs
     ) -> Dict[str, Any]:
         """
         Embed metadata into PDF.
@@ -45,11 +41,7 @@ class EmbedderPlugin(BasePlugin):
         pass
 
     @abstractmethod
-    def check(
-        self,
-        pdf_path: str,
-        **kwargs
-    ) -> Dict[str, Any]:
+    def check(self, pdf_path: str, **kwargs) -> Dict[str, Any]:
         """
         Check if PDF has embedded metadata.
 
@@ -86,5 +78,5 @@ class EmbedderPlugin(BasePlugin):
             version="1.0.0",
             author="Unknown",
             description="Custom metadata embedder",
-            category="embedder"
+            category="embedder",
         )

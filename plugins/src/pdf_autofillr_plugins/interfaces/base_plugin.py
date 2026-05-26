@@ -12,6 +12,7 @@ from typing import Any, Dict, List, Optional
 @dataclass
 class PluginMetadata:
     """Plugin metadata"""
+
     name: str
     version: str
     author: str
@@ -123,7 +124,6 @@ class BasePlugin(ABC):
             Configuration value or default
         """
         return self.config.get(key, default)
-
 
     @property
     def priority(self) -> int:

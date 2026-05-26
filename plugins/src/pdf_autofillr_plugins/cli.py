@@ -7,6 +7,7 @@ Commands:
     pdf-autofillr-plugins list      — list all discovered plugins in a directory
     pdf-autofillr-plugins --version — print version
 """
+
 from __future__ import annotations
 
 import argparse
@@ -94,10 +95,10 @@ def cmd_status(args: argparse.Namespace) -> int:
     print("\n  Optional integrations")
     print("  " + "─" * 50)
     optional = [
-        ("pdf_autofillr_mapper",     "mapper",     'pip install "pdf-autofillr[mapper]"'),
-        ("chatbot",                  "chatbot",    'pip install "pdf-autofillr[chatbot]"'),
+        ("pdf_autofillr_mapper", "mapper", 'pip install "pdf-autofillr[mapper]"'),
+        ("chatbot", "chatbot", 'pip install "pdf-autofillr[chatbot]"'),
         ("pdf_autofillr_doc_upload", "doc-upload", 'pip install "pdf-autofillr[doc-upload]"'),
-        ("ragpdf",                   "rag",        'pip install "pdf-autofillr[rag]"'),
+        ("ragpdf", "rag", 'pip install "pdf-autofillr[rag]"'),
     ]
     for module, name, hint in optional:
         try:
@@ -126,7 +127,9 @@ def cmd_list(args: argparse.Namespace) -> int:
     paths = [args.path] if args.path else []
 
     if paths:
-        discovered = manager.discover_plugins(paths, categories=[args.category] if args.category else None)
+        discovered = manager.discover_plugins(
+            paths, categories=[args.category] if args.category else None
+        )
         if not discovered or all(len(v) == 0 for v in discovered.values()):
             print(f"\n  No plugins discovered in: {args.path}\n")
             return 0
@@ -163,15 +166,20 @@ def build_parser() -> argparse.ArgumentParser:
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument(
-        "--version", "-v",
+        "--version",
+        "-v",
         action="version",
         version=f"pdf-autofillr-plugins {__version__}",
     )
 
     subparsers = parser.add_subparsers(dest="command", metavar="COMMAND")
 
-    subparsers.add_parser("setup", help="First-time setup: create .env and copy usage guides").set_defaults(func=cmd_setup)
-    subparsers.add_parser("status", help="Check installation and environment").set_defaults(func=cmd_status)
+    subparsers.add_parser(
+        "setup", help="First-time setup: create .env and copy usage guides"
+    ).set_defaults(func=cmd_setup)
+    subparsers.add_parser("status", help="Check installation and environment").set_defaults(
+        func=cmd_status
+    )
 
     ls = subparsers.add_parser("list", help="List discovered plugins in a directory")
     ls.add_argument("--path", "-p", default=None, help="Directory to scan for plugins")

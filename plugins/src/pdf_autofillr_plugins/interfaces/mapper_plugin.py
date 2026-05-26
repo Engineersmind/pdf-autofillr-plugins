@@ -22,7 +22,7 @@ class MapperPlugin(BasePlugin):
         self,
         extracted_fields: List[Dict[str, Any]],
         target_schema: Optional[Dict[str, Any]] = None,
-        **kwargs
+        **kwargs,
     ) -> Dict[str, Any]:
         """
         Map extracted fields to target schema.
@@ -56,9 +56,7 @@ class MapperPlugin(BasePlugin):
         pass
 
     def get_mapping_confidence(
-        self,
-        extracted_fields: List[Dict[str, Any]],
-        target_schema: Dict[str, Any]
+        self, extracted_fields: List[Dict[str, Any]], target_schema: Dict[str, Any]
     ) -> float:
         """
         Calculate confidence score for mapping.
@@ -73,9 +71,7 @@ class MapperPlugin(BasePlugin):
         return 0.5  # Default: medium confidence
 
     def validate_mapping(
-        self,
-        mapped_fields: Dict[str, Any],
-        target_schema: Dict[str, Any]
+        self, mapped_fields: Dict[str, Any], target_schema: Dict[str, Any]
     ) -> bool:
         """
         Validate that mapping conforms to target schema.
@@ -97,5 +93,5 @@ class MapperPlugin(BasePlugin):
             version="1.0.0",
             author="Unknown",
             description="Custom field mapper",
-            category="mapper"
+            category="mapper",
         )

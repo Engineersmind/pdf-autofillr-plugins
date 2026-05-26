@@ -13,6 +13,7 @@ the "source" is a pre-loaded in-memory dict.
 Config:
     data (dict): {record_id: {field: value}} mapping
 """
+
 from __future__ import annotations
 
 from typing import Any, Dict, List

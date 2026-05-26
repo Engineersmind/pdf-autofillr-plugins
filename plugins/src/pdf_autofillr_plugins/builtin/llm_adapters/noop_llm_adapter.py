@@ -6,6 +6,7 @@ Used for testing and as a baseline. No API calls, no dependencies.
 
 Registered under category="llm_adapter", name="noop-llm".
 """
+
 from __future__ import annotations
 
 from typing import Any, Dict, List

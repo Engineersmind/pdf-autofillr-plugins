@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 # Default paths
 _PACKAGE_ROOT = Path(__file__).parent.parent
 _REGISTRY_DIR = _PACKAGE_ROOT / "registry"
-_SCHEMA_PATH  = _PACKAGE_ROOT / "plugin.schema.json"
+_SCHEMA_PATH = _PACKAGE_ROOT / "plugin.schema.json"
 
 
 class PluginLoader:
@@ -51,7 +51,7 @@ class PluginLoader:
         schema_path: Optional[Path] = _SCHEMA_PATH,
     ) -> None:
         self.registry_dir = Path(registry_dir) if registry_dir else _REGISTRY_DIR
-        self.schema_path  = Path(schema_path) if schema_path else None
+        self.schema_path = Path(schema_path) if schema_path else None
         self._schema: Optional[Dict[str, Any]] = None
         self._loaded: List[str] = []
 
@@ -84,6 +84,7 @@ class PluginLoader:
 
         try:
             import jsonschema
+
             jsonschema.validate(instance=manifest, schema=schema)
             return True
         except ImportError:
@@ -158,13 +159,11 @@ class PluginLoader:
             True if imported and registered successfully.
         """
         module_path = manifest.get("module")
-        class_name  = manifest.get("class")
-        category    = manifest.get("category")
+        class_name = manifest.get("class")
+        category = manifest.get("category")
 
         if not all([module_path, class_name, category]):
-            logger.error(
-                "Manifest '%s' missing required fields (module, class, category)", name
-            )
+            logger.error("Manifest '%s' missing required fields (module, class, category)", name)
             return False
 
         try:
@@ -172,7 +171,9 @@ class PluginLoader:
             getattr(module, class_name)
             logger.info(
                 "PluginLoader: registered '%s' (%s) from %s",
-                name, category, module_path,
+                name,
+                category,
+                module_path,
             )
             self._loaded.append(name)
             return True

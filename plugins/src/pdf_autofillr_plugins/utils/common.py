@@ -9,6 +9,7 @@ They were originally in plugins/core/common_utils.py in the sdk-exp repo
 and are bundled here so plugin authors have them available without
 importing from another package.
 """
+
 from __future__ import annotations
 
 import hashlib
@@ -26,12 +27,14 @@ logger = logging.getLogger(__name__)
 
 # ── ID generation ─────────────────────────────────────────────────────────────
 
+
 def generate_session_id() -> str:
     """Generate a unique session ID (UUID4 string)."""
     return str(uuid.uuid4())
 
 
 # ── Hashing ───────────────────────────────────────────────────────────────────
+
 
 def generate_file_hash(file_path: str, algorithm: str = "sha256") -> str:
     """
@@ -69,6 +72,7 @@ def generate_content_hash(content: bytes, algorithm: str = "sha256") -> str:
 
 # ── JSON helpers ──────────────────────────────────────────────────────────────
 
+
 def safe_json_dumps(obj: Any, indent: Optional[int] = None) -> str:
     """
     Serialize *obj* to JSON, gracefully handling non-serialisable types.
@@ -76,6 +80,7 @@ def safe_json_dumps(obj: Any, indent: Optional[int] = None) -> str:
     datetime → ISO string, objects with __dict__ → their dict, everything
     else → str().
     """
+
     def _default(o: Any) -> Any:
         if isinstance(o, datetime):
             return o.isoformat()
@@ -99,6 +104,7 @@ def safe_json_loads(json_str: str, default: Any = None) -> Any:
 
 # ── Dict helpers ──────────────────────────────────────────────────────────────
 
+
 def merge_dicts(*dicts: Dict[str, Any]) -> Dict[str, Any]:
     """
     Merge multiple dicts left-to-right (later dicts override earlier ones).
@@ -112,6 +118,7 @@ def merge_dicts(*dicts: Dict[str, Any]) -> Dict[str, Any]:
 
 
 # ── String helpers ────────────────────────────────────────────────────────────
+
 
 def sanitize_filename(filename: str) -> str:
     """
@@ -152,12 +159,14 @@ def truncate_string(s: str, max_length: int = 100, suffix: str = "...") -> str:
 
 # ── List helpers ──────────────────────────────────────────────────────────────
 
+
 def chunk_list(lst: list, chunk_size: int) -> List[list]:
     """Split *lst* into sub-lists of at most *chunk_size* items each."""
-    return [lst[i: i + chunk_size] for i in range(0, len(lst), chunk_size)]
+    return [lst[i : i + chunk_size] for i in range(0, len(lst), chunk_size)]
 
 
 # ── Retry ─────────────────────────────────────────────────────────────────────
+
 
 def retry_with_backoff(
     func: Callable,
@@ -193,7 +202,10 @@ def retry_with_backoff(
             if attempt < max_retries:
                 logger.warning(
                     "Attempt %d/%d failed: %s. Retrying in %.1fs…",
-                    attempt + 1, max_retries + 1, exc, delay,
+                    attempt + 1,
+                    max_retries + 1,
+                    exc,
+                    delay,
                 )
                 time.sleep(delay)
                 delay *= backoff_factor
@@ -206,6 +218,7 @@ def retry_with_backoff(
 
 
 # ── Timer ─────────────────────────────────────────────────────────────────────
+
 
 class Timer:
     """Context manager that measures wall-clock time for a named operation."""

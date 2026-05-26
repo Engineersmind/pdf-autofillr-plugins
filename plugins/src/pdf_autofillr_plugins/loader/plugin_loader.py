@@ -113,7 +113,9 @@ class PluginLoader:
             if self._load_manifest_file(manifest_file):
                 loaded.append(name)
 
-        logger.info("PluginLoader: loaded %d plugin(s) from %s", len(loaded), self.registry_dir)
+        logger.info(
+            "PluginLoader: loaded %d plugin(s) from %s", len(loaded), self.registry_dir
+        )
         return loaded
 
     def load(self, plugin_name: str) -> bool:
@@ -163,12 +165,14 @@ class PluginLoader:
         category = manifest.get("category")
 
         if not all([module_path, class_name, category]):
-            logger.error("Manifest '%s' missing required fields (module, class, category)", name)
+            logger.error(
+                "Manifest '%s' missing required fields (module, class, category)", name
+            )
             return False
 
         try:
-            module = importlib.import_module(module_path)
-            getattr(module, class_name)
+            module = importlib.import_module(str(module_path))
+            getattr(module, str(class_name))
             logger.info(
                 "PluginLoader: registered '%s' (%s) from %s",
                 name,
@@ -179,7 +183,9 @@ class PluginLoader:
             return True
 
         except ImportError as e:
-            logger.error("Cannot import module '%s' for plugin '%s': %s", module_path, name, e)
+            logger.error(
+                "Cannot import module '%s' for plugin '%s': %s", module_path, name, e
+            )
         except AttributeError:
             logger.error("Class '%s' not found in module '%s'", class_name, module_path)
         except Exception as e:

@@ -60,7 +60,12 @@ class EmailValidatorPlugin(ValidatorPlugin):
         )
 
     def supports_field_type(self, field_type: str) -> bool:
-        return field_type.lower() in {"email", "email_address", "emailaddress", "e-mail"}
+        return field_type.lower() in {
+            "email",
+            "email_address",
+            "emailaddress",
+            "e-mail",
+        }
 
     def validate(
         self,

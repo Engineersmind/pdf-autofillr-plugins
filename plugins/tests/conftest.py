@@ -8,15 +8,22 @@ from pdf_autofillr_plugins.decorators import plugin
 # from pdf_autofillr_plugins.interfaces.base_plugin import BasePlugin, PluginMetadata
 from pdf_autofillr_plugins.interfaces.base_plugin import PluginMetadata
 
+# ── Dynamic imports preserved as variables ────────────────────────────────────
+ValidatorPlugin = __import__(
+    "pdf_autofillr_plugins.interfaces.validator_plugin", fromlist=["ValidatorPlugin"]
+).ValidatorPlugin
+ExtractorPlugin = __import__(
+    "pdf_autofillr_plugins.interfaces.extractor_plugin", fromlist=["ExtractorPlugin"]
+).ExtractorPlugin
+MapperPlugin = __import__(
+    "pdf_autofillr_plugins.interfaces.mapper_plugin", fromlist=["MapperPlugin"]
+).MapperPlugin
+
 # ── Minimal concrete implementations for testing ──────────────────────────────
 
 
 @plugin(category="validator", name="noop-validator", version="0.1.0", author="Test")
-class NoopValidator(
-    __import__(
-        "pdf_autofillr_plugins.interfaces.validator_plugin", fromlist=["ValidatorPlugin"]
-    ).ValidatorPlugin
-):
+class NoopValidator(ValidatorPlugin):  # type: ignore[misc, valid-type]
     def get_metadata(self):
         return PluginMetadata(
             name="noop-validator",
@@ -30,15 +37,16 @@ class NoopValidator(
         return True
 
     def validate(self, name, value, rules=None, **kw):
-        return {"valid": True, "errors": [], "warnings": [], "validator": "noop-validator"}
+        return {
+            "valid": True,
+            "errors": [],
+            "warnings": [],
+            "validator": "noop-validator",
+        }
 
 
 @plugin(category="extractor", name="noop-extractor", version="0.1.0", author="Test")
-class NoopExtractor(
-    __import__(
-        "pdf_autofillr_plugins.interfaces.extractor_plugin", fromlist=["ExtractorPlugin"]
-    ).ExtractorPlugin
-):
+class NoopExtractor(ExtractorPlugin):  # type: ignore[misc, valid-type]
     def get_metadata(self):
         return PluginMetadata(
             name="noop-extractor",
@@ -56,11 +64,7 @@ class NoopExtractor(
 
 
 @plugin(category="mapper", name="noop-mapper", version="0.1.0", author="Test")
-class NoopMapper(
-    __import__(
-        "pdf_autofillr_plugins.interfaces.mapper_plugin", fromlist=["MapperPlugin"]
-    ).MapperPlugin
-):
+class NoopMapper(MapperPlugin):  # type: ignore[misc, valid-type]
     def get_metadata(self):
         return PluginMetadata(
             name="noop-mapper",

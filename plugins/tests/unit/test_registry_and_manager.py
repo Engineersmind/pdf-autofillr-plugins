@@ -65,7 +65,12 @@ class TestPluginDecorator:
                 )
 
             def validate(self, name, value, rules=None, **kw):
-                return {"valid": True, "errors": [], "warnings": [], "validator": "inst-test"}
+                return {
+                    "valid": True,
+                    "errors": [],
+                    "warnings": [],
+                    "validator": "inst-test",
+                }
 
             def supports_field_type(self, ft):
                 return True

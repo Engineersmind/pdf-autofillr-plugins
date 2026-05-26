@@ -263,7 +263,14 @@ class TestChunkerInterface:
                 )
 
             def chunk(self, pdf_path, chunk_size=None, **kw):
-                return [{"chunk_id": "1", "content": "text", "page_numbers": [1], "metadata": {}}]
+                return [
+                    {
+                        "chunk_id": "1",
+                        "content": "text",
+                        "page_numbers": [1],
+                        "metadata": {},
+                    }
+                ]
 
         c = TestChunker()
         c.initialize()
@@ -332,7 +339,11 @@ class TestFillerInterface:
         class TestFiller(FillerPlugin):
             def get_metadata(self):
                 return PluginMetadata(
-                    name="test-filler", version="1.0", author="T", description="", category="filler"
+                    name="test-filler",
+                    version="1.0",
+                    author="T",
+                    description="",
+                    category="filler",
                 )
 
             def supports_pdf_type(self, pdf_path):
@@ -389,7 +400,9 @@ class TestTransformerInterface:
 
 class TestValidatorBatchMethod:
     def test_validate_batch(self):
-        from pdf_autofillr_plugins.builtin.validators.email_validator import EmailValidatorPlugin
+        from pdf_autofillr_plugins.builtin.validators.email_validator import (
+            EmailValidatorPlugin,
+        )
 
         v = EmailValidatorPlugin()
         v.initialize()
@@ -423,7 +436,9 @@ class TestExtractorDefaults:
 
 class TestMapperDefaults:
     def test_validate_mapping_default_true(self):
-        from pdf_autofillr_plugins.builtin.mappers.identity_mapper import IdentityMapperPlugin
+        from pdf_autofillr_plugins.builtin.mappers.identity_mapper import (
+            IdentityMapperPlugin,
+        )
 
         m = IdentityMapperPlugin()
         m.initialize()
@@ -432,7 +447,9 @@ class TestMapperDefaults:
 
 class TestBasePluginReprStr:
     def test_repr(self):
-        from pdf_autofillr_plugins.builtin.validators.email_validator import EmailValidatorPlugin
+        from pdf_autofillr_plugins.builtin.validators.email_validator import (
+            EmailValidatorPlugin,
+        )
 
         v = EmailValidatorPlugin()
         r = repr(v)
@@ -440,7 +457,9 @@ class TestBasePluginReprStr:
         assert "email-validator" in r
 
     def test_str(self):
-        from pdf_autofillr_plugins.builtin.validators.email_validator import EmailValidatorPlugin
+        from pdf_autofillr_plugins.builtin.validators.email_validator import (
+            EmailValidatorPlugin,
+        )
 
         v = EmailValidatorPlugin()
         s = str(v)
@@ -448,13 +467,17 @@ class TestBasePluginReprStr:
         assert "1.0.0" in s
 
     def test_is_initialized_false_before_init(self):
-        from pdf_autofillr_plugins.builtin.validators.email_validator import EmailValidatorPlugin
+        from pdf_autofillr_plugins.builtin.validators.email_validator import (
+            EmailValidatorPlugin,
+        )
 
         v = EmailValidatorPlugin()
         assert v.is_initialized is False
 
     def test_is_initialized_true_after_init(self):
-        from pdf_autofillr_plugins.builtin.validators.email_validator import EmailValidatorPlugin
+        from pdf_autofillr_plugins.builtin.validators.email_validator import (
+            EmailValidatorPlugin,
+        )
 
         v = EmailValidatorPlugin()
         v.initialize()
@@ -477,13 +500,17 @@ class TestBasePluginReprStr:
         assert "invoice" in e.tags
 
     def test_get_config_value_default(self):
-        from pdf_autofillr_plugins.builtin.validators.email_validator import EmailValidatorPlugin
+        from pdf_autofillr_plugins.builtin.validators.email_validator import (
+            EmailValidatorPlugin,
+        )
 
         v = EmailValidatorPlugin()
         assert v.get_config_value("nonexistent_key", "fallback") == "fallback"
 
     def test_validate_config_default_true(self):
-        from pdf_autofillr_plugins.builtin.validators.email_validator import EmailValidatorPlugin
+        from pdf_autofillr_plugins.builtin.validators.email_validator import (
+            EmailValidatorPlugin,
+        )
 
         v = EmailValidatorPlugin()
         assert v.validate_config({"any": "config"}) is True

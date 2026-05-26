@@ -141,7 +141,7 @@ def get_file_extension(filename: str) -> str:
     return os.path.splitext(filename)[1]
 
 
-def format_bytes(size: int) -> str:
+def format_bytes(size: float) -> str:
     """Format a byte count as a human-readable string (e.g. '1.5 MB')."""
     for unit in ("B", "KB", "MB", "GB", "TB"):
         if size < 1024.0:
@@ -197,7 +197,7 @@ def retry_with_backoff(
     for attempt in range(max_retries + 1):
         try:
             return func()
-        except exceptions as exc:
+        except exceptions as exc:  # type: ignore[misc]
             last_exc = exc
             if attempt < max_retries:
                 logger.warning(
@@ -214,7 +214,9 @@ def retry_with_backoff(
 
     if last_exc is not None:
         raise last_exc
-    raise RuntimeError("retry_with_backoff: all attempts failed with no exception captured")
+    raise RuntimeError(
+        "retry_with_backoff: all attempts failed with no exception captured"
+    )
 
 
 # ── Timer ─────────────────────────────────────────────────────────────────────

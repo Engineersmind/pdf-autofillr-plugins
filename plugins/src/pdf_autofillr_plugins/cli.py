@@ -72,13 +72,17 @@ def cmd_setup(args: argparse.Namespace) -> int:
         if not local_usage.exists():
             shutil.copytree(str(usage_src), str(local_usage))
             print("\n  OK  Created usage/ directory")
-            print("  --> Open usage/validator.md to get started writing your first plugin")
+            print(
+                "  --> Open usage/validator.md to get started writing your first plugin"
+            )
         else:
             print("\n  OK  usage/ already exists -- skipping")
     else:
         print("\n  Quick start:")
         print("    from pdf_autofillr_plugins import plugin, PluginManager")
-        print("    from pdf_autofillr_plugins.interfaces import ValidatorPlugin, PluginMetadata")
+        print(
+            "    from pdf_autofillr_plugins.interfaces import ValidatorPlugin, PluginMetadata"
+        )
 
     print("\n  Run 'pdf-autofillr-plugins status' to verify everything is ready.\n")
     return 0
@@ -97,7 +101,11 @@ def cmd_status(args: argparse.Namespace) -> int:
     optional = [
         ("pdf_autofillr_mapper", "mapper", 'pip install "pdf-autofillr[mapper]"'),
         ("chatbot", "chatbot", 'pip install "pdf-autofillr[chatbot]"'),
-        ("pdf_autofillr_doc_upload", "doc-upload", 'pip install "pdf-autofillr[doc-upload]"'),
+        (
+            "pdf_autofillr_doc_upload",
+            "doc-upload",
+            'pip install "pdf-autofillr[doc-upload]"',
+        ),
         ("ragpdf", "rag", 'pip install "pdf-autofillr[rag]"'),
     ]
     for module, name, hint in optional:
@@ -143,7 +151,9 @@ def cmd_list(args: argparse.Namespace) -> int:
             for name in names:
                 info = manager.get_plugin_info(name, category)
                 if info:
-                    print(f"    • {info['name']:<30} v{info['version']}  {info['description']}")
+                    print(
+                        f"    • {info['name']:<30} v{info['version']}  {info['description']}"
+                    )
                 else:
                     print(f"    • {name}")
             print()
@@ -177,9 +187,9 @@ def build_parser() -> argparse.ArgumentParser:
     subparsers.add_parser(
         "setup", help="First-time setup: create .env and copy usage guides"
     ).set_defaults(func=cmd_setup)
-    subparsers.add_parser("status", help="Check installation and environment").set_defaults(
-        func=cmd_status
-    )
+    subparsers.add_parser(
+        "status", help="Check installation and environment"
+    ).set_defaults(func=cmd_status)
 
     ls = subparsers.add_parser("list", help="List discovered plugins in a directory")
     ls.add_argument("--path", "-p", default=None, help="Directory to scan for plugins")

@@ -218,7 +218,7 @@ class BaseHandler(HandlerInterface):
     Modules can extend this class for consistent behavior.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize handler."""
         self.supported_operations: List[str] = []
 

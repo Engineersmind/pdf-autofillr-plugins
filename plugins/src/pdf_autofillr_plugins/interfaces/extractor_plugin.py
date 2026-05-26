@@ -18,7 +18,9 @@ class ExtractorPlugin(BasePlugin):
     """
 
     @abstractmethod
-    def extract(self, pdf_path: str, strategy: Optional[str] = None, **kwargs) -> Dict[str, Any]:
+    def extract(
+        self, pdf_path: str, strategy: Optional[str] = None, **kwargs
+    ) -> Dict[str, Any]:
         """
         Extract fields from PDF.
 
@@ -108,5 +110,5 @@ class ExtractorResult:
         if self.extractor:
             result["extractor"] = self.extractor
         if self.confidence is not None:
-            result["confidence"] = self.confidence
+            result["confidence"] = self.confidence  # type: ignore[assignment]
         return result

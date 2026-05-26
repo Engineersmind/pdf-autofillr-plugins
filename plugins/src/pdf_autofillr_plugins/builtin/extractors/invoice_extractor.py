@@ -74,7 +74,9 @@ class InvoiceExtractorPlugin(ExtractorPlugin):
         fields: List[Dict[str, Any]] = [
             {
                 "name": "invoice_number",
-                "value": self.get_config_value("default_invoice_number", "INV-2026-001"),
+                "value": self.get_config_value(
+                    "default_invoice_number", "INV-2026-001"
+                ),
                 "type": "text",
                 "confidence": 0.95,
                 "bbox": [100, 50, 200, 70],
@@ -88,7 +90,9 @@ class InvoiceExtractorPlugin(ExtractorPlugin):
             },
             {
                 "name": "vendor_name",
-                "value": self.get_config_value("default_vendor_name", "Acme Corporation"),
+                "value": self.get_config_value(
+                    "default_vendor_name", "Acme Corporation"
+                ),
                 "type": "text",
                 "confidence": 0.92,
                 "bbox": [100, 110, 300, 130],

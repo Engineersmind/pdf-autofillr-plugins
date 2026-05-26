@@ -18,9 +18,9 @@ class PluginMetadata:
     author: str
     description: str
     category: str
-    tags: List[str] = None
-    dependencies: List[str] = None
-    config_schema: Dict[str, Any] = None
+    tags: Optional[List[str]] = None
+    dependencies: Optional[List[str]] = None
+    config_schema: Optional[Dict[str, Any]] = None
 
     def __post_init__(self):
         if self.tags is None:
@@ -141,7 +141,9 @@ class BasePlugin(ABC):
         return self._initialized
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__name__}(name='{self.name}', version='{self.version}')"
+        return (
+            f"{self.__class__.__name__}(name='{self.name}', version='{self.version}')"
+        )
 
     def __str__(self) -> str:
         return f"{self.name} v{self.version}"

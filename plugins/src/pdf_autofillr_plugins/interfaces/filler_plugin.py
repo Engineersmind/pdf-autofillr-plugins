@@ -19,7 +19,11 @@ class FillerPlugin(BasePlugin):
 
     @abstractmethod
     def fill(
-        self, pdf_path: str, data: Dict[str, Any], output_path: Optional[str] = None, **kwargs
+        self,
+        pdf_path: str,
+        data: Dict[str, Any],
+        output_path: Optional[str] = None,
+        **kwargs
     ) -> Dict[str, Any]:
         """
         Fill PDF with data.

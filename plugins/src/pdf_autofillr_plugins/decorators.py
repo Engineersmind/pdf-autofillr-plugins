@@ -96,9 +96,9 @@ def validates_config(validator_func: Callable):
 
     @wraps(validator_func)
     def wrapper(config: Dict[str, Any]) -> bool:
-        return validator_func(config)
+        return bool(validator_func(config))
 
-    wrapper._is_validator = True
+    wrapper._is_validator = True  # type: ignore[attr-defined]
     return wrapper
 
 
@@ -115,7 +115,7 @@ def pre_execute(func: Callable):
     Args:
         func: Pre-execution function
     """
-    func._is_pre_hook = True
+    func._is_pre_hook = True  # type: ignore[attr-defined]
     return func
 
 
@@ -132,7 +132,7 @@ def post_execute(func: Callable):
     Args:
         func: Post-execution function
     """
-    func._is_post_hook = True
+    func._is_post_hook = True  # type: ignore[attr-defined]
     return func
 
 
@@ -150,7 +150,7 @@ def error_handler(func: Callable):
     Args:
         func: Error handler function
     """
-    func._is_error_handler = True
+    func._is_error_handler = True  # type: ignore[attr-defined]
     return func
 
 
@@ -170,7 +170,7 @@ def cache_result(ttl: int = 3600):
     """
 
     def decorator(func: Callable):
-        cache = {}
+        cache: Dict[str, Any] = {}
 
         @wraps(func)
         def wrapper(self, *args, **kwargs):
@@ -190,8 +190,8 @@ def cache_result(ttl: int = 3600):
             cache[cache_key] = (result, time.time())
             return result
 
-        wrapper._is_cached = True
-        wrapper._cache_ttl = ttl
+        wrapper._is_cached = True  # type: ignore[attr-defined]
+        wrapper._cache_ttl = ttl  # type: ignore[attr-defined]
         return wrapper
 
     return decorator

@@ -72,7 +72,10 @@ class PluginManager:
         return discovered
 
     def load_plugin(
-        self, name: str, category: Optional[str] = None, config: Optional[Dict[str, Any]] = None
+        self,
+        name: str,
+        category: Optional[str] = None,
+        config: Optional[Dict[str, Any]] = None,
     ) -> Optional[BasePlugin]:
         """
         Load and initialize a plugin.
@@ -115,7 +118,9 @@ class PluginManager:
             print(f"Error loading plugin {name}: {e}")
             return None
 
-    def get_plugin(self, name: str, category: Optional[str] = None) -> Optional[BasePlugin]:
+    def get_plugin(
+        self, name: str, category: Optional[str] = None
+    ) -> Optional[BasePlugin]:
         """
         Get a loaded plugin instance.
 
@@ -308,7 +313,9 @@ class PluginManager:
             if plugin and isinstance(plugin, OutputFormatterPlugin):
                 try:
                     if not format_name or plugin.supports_format(format_name):
-                        info = self.registry.get_plugin_info(plugin_name, "output_formatter")
+                        info = self.registry.get_plugin_info(
+                            plugin_name, "output_formatter"
+                        )
                         priority = info.get("priority", 100) if info else 100
                         compatible.append((priority, plugin))
                 except Exception as e:
@@ -342,7 +349,9 @@ class PluginManager:
             if plugin and isinstance(plugin, DataConnectorPlugin):
                 try:
                     if not source_name or plugin.supports_source(source_name):
-                        info = self.registry.get_plugin_info(plugin_name, "data_connector")
+                        info = self.registry.get_plugin_info(
+                            plugin_name, "data_connector"
+                        )
                         priority = info.get("priority", 100) if info else 100
                         compatible.append((priority, plugin))
                 except Exception as e:

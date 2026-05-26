@@ -81,7 +81,9 @@ class StorageInterface(ABC):
         pass
 
     @abstractmethod
-    def upload_bytes(self, data: bytes, key: str, metadata: Optional[Dict[str, str]] = None) -> str:
+    def upload_bytes(
+        self, data: bytes, key: str, metadata: Optional[Dict[str, str]] = None
+    ) -> str:
         """
         Upload bytes to storage.
 
@@ -225,7 +227,8 @@ class StorageInterface(ABC):
 # =============================================================================
 
 
-def create_storage(config: StorageConfig) -> StorageInterface:
+# mypy: disable-error-code="name-defined,no-any-return"
+def create_storage(config: StorageConfig) -> StorageInterface:  # type: ignore[return-value]
     """
     Factory function to create appropriate storage implementation.
 
@@ -238,21 +241,23 @@ def create_storage(config: StorageConfig) -> StorageInterface:
     Raises:
         ValueError: If provider is not supported
     """
+    # fmt: off
     if config.provider == StorageProvider.AWS_S3:
         # from .storage_aws import S3Storage
-        return S3Storage(config)  # noqa: F821
+        return S3Storage(config)  # noqa: F821  # type: ignore[name-defined, no-any-return]
 
     elif config.provider == StorageProvider.AZURE_BLOB:
         # from .storage_azure import AzureBlobStorage
-        return AzureBlobStorage(config)  # noqa: F821
+        return AzureBlobStorage(config)  # noqa: F821  # type: ignore[name-defined, no-any-return]
 
     elif config.provider == StorageProvider.GCP_STORAGE:
         # from .storage_gcp import GCSStorage
-        return GCSStorage(config)  # noqa: F821
+        return GCSStorage(config)  # noqa: F821  # type: ignore[name-defined, no-any-return]
 
     elif config.provider == StorageProvider.LOCAL:
         # from .storage_local import LocalStorage
-        return LocalStorage(config)  # noqa: F821
+        return LocalStorage(config)  # noqa: F821  # type: ignore[name-defined, no-any-return]
 
     else:
         raise ValueError(f"Unsupported storage provider: {config.provider}")
+    # fmt: on

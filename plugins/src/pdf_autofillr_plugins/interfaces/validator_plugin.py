@@ -19,7 +19,11 @@ class ValidatorPlugin(BasePlugin):
 
     @abstractmethod
     def validate(
-        self, field_name: str, field_value: Any, rules: Optional[Dict[str, Any]] = None, **kwargs
+        self,
+        field_name: str,
+        field_value: Any,
+        rules: Optional[Dict[str, Any]] = None,
+        **kwargs
     ) -> Dict[str, Any]:
         """
         Validate field value.

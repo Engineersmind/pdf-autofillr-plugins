@@ -2,7 +2,9 @@
 
 import pytest
 
-from pdf_autofillr_plugins.builtin.extractors.invoice_extractor import InvoiceExtractorPlugin
+from pdf_autofillr_plugins.builtin.extractors.invoice_extractor import (
+    InvoiceExtractorPlugin,
+)
 from pdf_autofillr_plugins.builtin.mappers.ml_mapper import MLMapperPlugin
 
 # ── MLMapperPlugin ────────────────────────────────────────────────────────────
@@ -21,7 +23,9 @@ class TestMLMapperPlugin:
         assert result["mapped_fields"].get("firstName") == "Jane"
 
     def test_synonym_normalised_match(self, mapper):
-        fields = [{"name": "email address", "value": "jane@example.com", "confidence": 0.9}]
+        fields = [
+            {"name": "email address", "value": "jane@example.com", "confidence": 0.9}
+        ]
         result = mapper.map_fields(fields)
         # "email address" normalises to "email_address" which maps to "emailAddress"
         assert "emailAddress" in result["mapped_fields"]
@@ -87,7 +91,12 @@ class TestInvoiceExtractorPlugin:
         result = extractor.extract("invoice_test.pdf")
         assert len(result["fields"]) == 4
         field_names = {f["name"] for f in result["fields"]}
-        assert {"invoice_number", "invoice_date", "vendor_name", "total_amount"} == field_names
+        assert {
+            "invoice_number",
+            "invoice_date",
+            "vendor_name",
+            "total_amount",
+        } == field_names
 
     def test_extractor_name_in_result(self, extractor):
         result = extractor.extract("invoice.pdf")

@@ -50,7 +50,9 @@ class BaseHook(ABC):
         self.config = config or {}
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__name__}(name='{self.name}', priority={self.priority})"
+        return (
+            f"{self.__class__.__name__}(name='{self.name}', priority={self.priority})"
+        )
 
 
 class PreExtractHook(BaseHook):
@@ -191,9 +193,14 @@ class HookRegistry:
 
     def unregister(self, hook: BaseHook) -> None:
         """Remove a hook instance from the registry."""
-        for lst in (self._pre_extract, self._post_extract, self._pre_fill, self._post_fill):
+        for lst in (
+            self._pre_extract,
+            self._post_extract,
+            self._pre_fill,
+            self._post_fill,
+        ):
             if hook in lst:
-                lst.remove(hook)
+                lst.remove(hook)  # type: ignore[arg-type]
                 return
 
     def run_pre_extract(self, pdf_bytes: bytes) -> bytes:

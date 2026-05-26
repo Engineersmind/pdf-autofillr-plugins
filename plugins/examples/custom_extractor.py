@@ -3,11 +3,12 @@ Example: writing a custom ExtractorPlugin.
 
     python examples/custom_extractor.py
 """
+
 from __future__ import annotations
 
 from typing import Any, Dict, List, Optional
 
-from pdf_autofillr_plugins import plugin, PluginManager
+from pdf_autofillr_plugins import PluginManager, plugin
 from pdf_autofillr_plugins.interfaces import ExtractorPlugin, PluginMetadata
 
 
@@ -49,10 +50,30 @@ class InvoiceExtractorPlugin(ExtractorPlugin):
     ) -> Dict[str, Any]:
         # In production: parse the actual PDF here
         fields: List[Dict[str, Any]] = [
-            {"name": "invoice_number", "value": "INV-2026-001", "type": "text",     "confidence": 0.97},
-            {"name": "invoice_date",   "value": "2026-04-30",   "type": "date",     "confidence": 0.98},
-            {"name": "vendor_name",    "value": "Acme Corp",    "type": "text",     "confidence": 0.95},
-            {"name": "total_amount",   "value": "1234.56",      "type": "currency", "confidence": 0.99},
+            {
+                "name": "invoice_number",
+                "value": "INV-2026-001",
+                "type": "text",
+                "confidence": 0.97,
+            },
+            {
+                "name": "invoice_date",
+                "value": "2026-04-30",
+                "type": "date",
+                "confidence": 0.98,
+            },
+            {
+                "name": "vendor_name",
+                "value": "Acme Corp",
+                "type": "text",
+                "confidence": 0.95,
+            },
+            {
+                "name": "total_amount",
+                "value": "1234.56",
+                "type": "currency",
+                "confidence": 0.99,
+            },
         ]
         return {
             "fields": fields,
@@ -67,7 +88,9 @@ class InvoiceExtractorPlugin(ExtractorPlugin):
 
 if __name__ == "__main__":
     manager = PluginManager()
-    manager.registry.register_plugin(InvoiceExtractorPlugin, "extractor", "invoice-extractor")
+    manager.registry.register_plugin(
+        InvoiceExtractorPlugin, "extractor", "invoice-extractor"
+    )
 
     # find_extractor uses supports() to pick the right plugin automatically
     extractor = manager.find_extractor("quarterly_invoice.pdf")

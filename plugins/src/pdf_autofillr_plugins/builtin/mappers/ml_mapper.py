@@ -150,12 +150,12 @@ class MLMapperPlugin(MapperPlugin):
         """
         # 1. Exact synonym lookup
         if source in self._synonyms:
-            return self._synonyms[source]
+            return str(self._synonyms[source])
 
         # 2. Normalised synonym lookup
         normalised = source.lower().replace(" ", "_").replace("-", "_")
         if normalised in self._synonyms:
-            return self._synonyms[normalised]
+            return str(self._synonyms[normalised])
 
         # 3. Direct schema key match
         if source in schema_keys:

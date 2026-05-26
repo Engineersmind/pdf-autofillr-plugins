@@ -5,20 +5,26 @@ Integration test — all 5 built-in plugins working together in a full pipeline.
 import pytest
 
 from pdf_autofillr_plugins import PluginManager
-from pdf_autofillr_plugins.builtin.extractors.invoice_extractor import InvoiceExtractorPlugin
+from pdf_autofillr_plugins.builtin.extractors.invoice_extractor import (
+    InvoiceExtractorPlugin,
+)
 from pdf_autofillr_plugins.builtin.extractors.passthrough_extractor import (
     PassthroughExtractorPlugin,
 )
 from pdf_autofillr_plugins.builtin.mappers.identity_mapper import IdentityMapperPlugin
 from pdf_autofillr_plugins.builtin.mappers.ml_mapper import MLMapperPlugin
-from pdf_autofillr_plugins.builtin.validators.email_validator import EmailValidatorPlugin
+from pdf_autofillr_plugins.builtin.validators.email_validator import (
+    EmailValidatorPlugin,
+)
 
 
 @pytest.fixture
 def full_manager():
     m = PluginManager()
     m.registry.register_plugin(EmailValidatorPlugin, "validator", "email-validator")
-    m.registry.register_plugin(PassthroughExtractorPlugin, "extractor", "passthrough-extractor")
+    m.registry.register_plugin(
+        PassthroughExtractorPlugin, "extractor", "passthrough-extractor"
+    )
     m.registry.register_plugin(InvoiceExtractorPlugin, "extractor", "invoice-extractor")
     m.registry.register_plugin(IdentityMapperPlugin, "mapper", "identity-mapper")
     m.registry.register_plugin(MLMapperPlugin, "mapper", "ml-mapper")
@@ -57,7 +63,11 @@ class TestAllFivePluginsTogether:
             {"name": "email_address", "value": "jane@example.com", "confidence": 0.98},
             {"name": "commitment_usd", "value": "500000", "confidence": 0.95},
         ]
-        schema = {"investor_name": "string", "email_address": "string", "commitment_usd": "string"}
+        schema = {
+            "investor_name": "string",
+            "email_address": "string",
+            "commitment_usd": "string",
+        }
 
         extractor = PassthroughExtractorPlugin(config={"fields": raw})
         extractor.initialize()

@@ -5,6 +5,7 @@ Manages plugin discovery and registration.
 """
 
 import importlib
+import importlib.util
 import inspect
 import pkgutil
 from pathlib import Path
@@ -18,7 +19,7 @@ class PluginRegistry:
     Registry for discovering and managing plugins.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._plugins: Dict[str, Dict[str, Type[BasePlugin]]] = {}
         self._instances: Dict[str, BasePlugin] = {}
 
@@ -35,7 +36,7 @@ class PluginRegistry:
         Returns:
             Dict of category -> list of plugin names
         """
-        discovered = {}
+        discovered: Dict[str, List[str]] = {}
 
         for search_path in search_paths:
             try:
@@ -50,7 +51,10 @@ class PluginRegistry:
         return discovered
 
     def _discover_from_module(
-        self, module_path: str, categories: Optional[List[str]], discovered: Dict[str, List[str]]
+        self,
+        module_path: str,
+        categories: Optional[List[str]],
+        discovered: Dict[str, List[str]],
     ):
         """Discover plugins from a Python module"""
         try:
@@ -75,7 +79,10 @@ class PluginRegistry:
             self._scan_module_for_plugins(module, categories, discovered)
 
     def _discover_from_path(
-        self, dir_path: str, categories: Optional[List[str]], discovered: Dict[str, List[str]]
+        self,
+        dir_path: str,
+        categories: Optional[List[str]],
+        discovered: Dict[str, List[str]],
     ):
         """Discover plugins from a file system path"""
         path = Path(dir_path)
@@ -110,13 +117,13 @@ class PluginRegistry:
                 and issubclass(obj, BasePlugin)
                 and obj is not BasePlugin
             ):
-                category = obj._plugin_category
+                category = obj._plugin_category  # type: ignore[attr-defined]
 
                 # Filter by category if specified
                 if categories and category not in categories:
                     continue
 
-                plugin_name = obj._plugin_name
+                plugin_name = obj._plugin_name  # type: ignore[attr-defined]
 
                 # Register plugin
                 if category not in self._plugins:
@@ -204,7 +211,9 @@ class PluginRegistry:
             "version": getattr(plugin_class, "_plugin_version", "unknown"),
             "author": getattr(plugin_class, "_plugin_author", "unknown"),
             "description": getattr(plugin_class, "_plugin_description", ""),
-            "category": getattr(plugin_class, "_plugin_category", category or "unknown"),
+            "category": getattr(
+                plugin_class, "_plugin_category", category or "unknown"
+            ),
             "tags": getattr(plugin_class, "_plugin_tags", []),
             "enabled": getattr(plugin_class, "_plugin_enabled", True),
             "priority": getattr(plugin_class, "_plugin_priority", 100),

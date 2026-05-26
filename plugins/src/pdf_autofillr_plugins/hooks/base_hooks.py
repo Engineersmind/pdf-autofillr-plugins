@@ -191,9 +191,14 @@ class HookRegistry:
 
     def unregister(self, hook: BaseHook) -> None:
         """Remove a hook instance from the registry."""
-        for lst in (self._pre_extract, self._post_extract, self._pre_fill, self._post_fill):
+        for lst in (
+            self._pre_extract,
+            self._post_extract,
+            self._pre_fill,
+            self._post_fill,
+        ):
             if hook in lst:
-                lst.remove(hook)
+                lst.remove(hook)  # type: ignore[arg-type]
                 return
 
     def run_pre_extract(self, pdf_bytes: bytes) -> bytes:
@@ -271,10 +276,10 @@ class HookRegistry:
     def list_hooks(self) -> Dict[str, List[str]]:
         """Return a summary of all registered hooks by type."""
         return {
-            "pre_extract":  [h.name for h in self._pre_extract],
+            "pre_extract": [h.name for h in self._pre_extract],
             "post_extract": [h.name for h in self._post_extract],
-            "pre_fill":     [h.name for h in self._pre_fill],
-            "post_fill":    [h.name for h in self._post_fill],
+            "pre_fill": [h.name for h in self._pre_fill],
+            "post_fill": [h.name for h in self._post_fill],
         }
 
     def clear(self) -> None:

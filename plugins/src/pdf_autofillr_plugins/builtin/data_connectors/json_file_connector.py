@@ -16,6 +16,7 @@ Example JSON file::
         "user_002": {"investor_name": "John Doe",  "email": "john@example.com"}
     }
 """
+
 from __future__ import annotations
 
 import json

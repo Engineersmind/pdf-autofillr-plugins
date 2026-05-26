@@ -4,13 +4,14 @@ Example: writing a custom ValidatorPlugin.
     pip install pdf-autofillr-plugins
     python examples/custom_validator.py
 """
+
 from __future__ import annotations
 
 import re
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
-from pdf_autofillr_plugins import plugin, PluginManager
-from pdf_autofillr_plugins.interfaces import ValidatorPlugin, PluginMetadata
+from pdf_autofillr_plugins import PluginManager, plugin
+from pdf_autofillr_plugins.interfaces import PluginMetadata, ValidatorPlugin
 
 
 @plugin(
@@ -48,8 +49,8 @@ class PhoneValidatorPlugin(ValidatorPlugin):
         rules: Optional[Dict[str, Any]] = None,
         **kwargs,
     ) -> Dict[str, Any]:
-        errors = []
-        warnings = []
+        errors: List[str] = []
+        warnings: List[str] = []
 
         if not isinstance(field_value, str):
             errors.append("Phone number must be a string")
@@ -70,21 +71,23 @@ class PhoneValidatorPlugin(ValidatorPlugin):
 
 if __name__ == "__main__":
     manager = PluginManager()
-    manager.registry.register_plugin(PhoneValidatorPlugin, "validator", "phone-validator")
+    manager.registry.register_plugin(
+        PhoneValidatorPlugin, "validator", "phone-validator"
+    )
 
     validator = manager.load_plugin("phone-validator", "validator")
     assert validator is not None, "Plugin failed to load"
 
     tests = [
         ("+12125551234", True),
-        ("555-1234",     False),
-        ("+1",           False),
+        ("555-1234", False),
+        ("+1", False),
         ("+447911123456", True),
     ]
     print("\nPhone Validator Results")
     print("─" * 40)
     for number, expected_valid in tests:
-        result = validator.validate("phone", number)
+        result = validator.validate("phone", number)  # type: ignore[union-attr, attr-defined]
         icon = "✅" if result["valid"] else "✗"
         status = "pass" if result["valid"] == expected_valid else "FAIL"
         print(f"  {icon}  {number:<20}  [{status}]")

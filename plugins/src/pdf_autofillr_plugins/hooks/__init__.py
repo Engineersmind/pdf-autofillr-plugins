@@ -12,11 +12,11 @@ Available hooks:
 
 from pdf_autofillr_plugins.hooks.base_hooks import (
     BaseHook,
-    PreExtractHook,
-    PostExtractHook,
-    PreFillHook,
-    PostFillHook,
     HookRegistry,
+    PostExtractHook,
+    PostFillHook,
+    PreExtractHook,
+    PreFillHook,
 )
 
 __all__ = [

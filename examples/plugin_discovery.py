@@ -4,6 +4,7 @@ Auto-discover plugins from a directory.
     pip install pdf-autofillr-plugins
     python examples/plugin_discovery.py
 """
+
 from __future__ import annotations
 
 import os
@@ -11,8 +12,7 @@ import tempfile
 
 from pdf_autofillr_plugins import PluginManager
 
-
-PLUGIN_CODE = '''
+PLUGIN_CODE = """
 from pdf_autofillr_plugins.decorators import plugin
 from pdf_autofillr_plugins.interfaces.validator_plugin import ValidatorPlugin
 from pdf_autofillr_plugins.interfaces.base_plugin import PluginMetadata
@@ -28,7 +28,7 @@ class DiscoveredPlugin(ValidatorPlugin):
         return {"valid": True, "errors": [], "warnings": [], "validator": "discovered-plugin",
                 "field_name": name, "field_value": value}
     def supports_field_type(self, ft): return True
-'''
+"""
 
 
 def main() -> None:
@@ -52,7 +52,7 @@ def main() -> None:
         if plugin:
             print(f"  Loaded:  {plugin.name}  v{plugin.version}  ({plugin.category})")
             print(f"  Tags:    {plugin.tags}")
-            result = plugin.validate("test_field", "test_value")
+            result = plugin.validate("test_field", "test_value")  # type: ignore[union-attr, attr-defined]
             print(f"  Result:  {result}")
 
         # List all registered plugins

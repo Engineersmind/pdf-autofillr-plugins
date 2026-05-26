@@ -57,9 +57,9 @@ Built-in plugins ready to use::
 __version__ = "0.2.0"
 
 from pdf_autofillr_plugins.decorators import plugin, requires
-from pdf_autofillr_plugins.registry import PluginRegistry
-from pdf_autofillr_plugins.manager import PluginManager
 from pdf_autofillr_plugins.interfaces.base_plugin import BasePlugin, PluginMetadata
+from pdf_autofillr_plugins.manager import PluginManager
+from pdf_autofillr_plugins.registry import PluginRegistry
 
 __all__ = [
     "plugin",

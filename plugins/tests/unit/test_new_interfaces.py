@@ -6,26 +6,37 @@ Unit tests for the three new plugin interfaces and their built-ins:
 
 And PluginManager.find_llm_adapter / find_output_formatter / find_data_connector.
 """
+
 from __future__ import annotations
 
 import json
+
 # import tempfile
 # import os
 import pytest
 
-from pdf_autofillr_plugins import plugin, PluginManager
-from pdf_autofillr_plugins.interfaces import (
-    LLMAdapter, OutputFormatterPlugin, DataConnectorPlugin, PluginMetadata,
-)
-from pdf_autofillr_plugins.builtin.llm_adapters.noop_llm_adapter import NoOpLLMAdapter
-from pdf_autofillr_plugins.builtin.llm_adapters.litellm_adapter import LiteLLMAdapter
-from pdf_autofillr_plugins.builtin.output_formatters.json_report_formatter import JSONReportFormatter
-from pdf_autofillr_plugins.builtin.output_formatters.passthrough_formatter import PassthroughFormatter
+from pdf_autofillr_plugins import PluginManager, plugin
 from pdf_autofillr_plugins.builtin.data_connectors.dict_connector import DictConnector
-from pdf_autofillr_plugins.builtin.data_connectors.json_file_connector import JSONFileConnector
-
+from pdf_autofillr_plugins.builtin.data_connectors.json_file_connector import (
+    JSONFileConnector,
+)
+from pdf_autofillr_plugins.builtin.llm_adapters.litellm_adapter import LiteLLMAdapter
+from pdf_autofillr_plugins.builtin.llm_adapters.noop_llm_adapter import NoOpLLMAdapter
+from pdf_autofillr_plugins.builtin.output_formatters.json_report_formatter import (
+    JSONReportFormatter,
+)
+from pdf_autofillr_plugins.builtin.output_formatters.passthrough_formatter import (
+    PassthroughFormatter,
+)
+from pdf_autofillr_plugins.interfaces import (
+    DataConnectorPlugin,
+    LLMAdapter,
+    OutputFormatterPlugin,
+    PluginMetadata,
+)
 
 # ── LLMAdapter interface ──────────────────────────────────────────────────────
+
 
 class TestLLMAdapterInterface:
     """Tests for the LLMAdapter abstract interface."""
@@ -34,10 +45,17 @@ class TestLLMAdapterInterface:
         @plugin(category="llm_adapter", name="test-llm")
         class TestLLM(LLMAdapter):
             def get_metadata(self):
-                return PluginMetadata(name="test-llm", version="1.0",
-                                      author="T", description="", category="llm_adapter")
+                return PluginMetadata(
+                    name="test-llm",
+                    version="1.0",
+                    author="T",
+                    description="",
+                    category="llm_adapter",
+                )
+
             def map_fields(self, fields, context):
                 return {f: f.upper() for f in fields}
+
             def embed(self, fields, schema_keys):
                 return {f: {"schema_key": f, "confidence": 1.0} for f in fields}
 
@@ -51,12 +69,20 @@ class TestLLMAdapterInterface:
         @plugin(category="llm_adapter", name="capture-llm")
         class CaptureLLM(LLMAdapter):
             received = {}
+
             def get_metadata(self):
-                return PluginMetadata(name="capture-llm", version="1.0",
-                                      author="T", description="", category="llm_adapter")
+                return PluginMetadata(
+                    name="capture-llm",
+                    version="1.0",
+                    author="T",
+                    description="",
+                    category="llm_adapter",
+                )
+
             def map_fields(self, fields, context):
                 CaptureLLM.received = {"fields": fields, "context": context}
                 return {f: f for f in fields}
+
             def embed(self, fields, schema_keys):
                 return {}
 
@@ -71,14 +97,25 @@ class TestLLMAdapterInterface:
         @plugin(category="llm_adapter", name="embed-llm")
         class EmbedLLM(LLMAdapter):
             def get_metadata(self):
-                return PluginMetadata(name="embed-llm", version="1.0",
-                                      author="T", description="", category="llm_adapter")
+                return PluginMetadata(
+                    name="embed-llm",
+                    version="1.0",
+                    author="T",
+                    description="",
+                    category="llm_adapter",
+                )
+
             def map_fields(self, fields, context):
                 return {f: f for f in fields}
+
             def embed(self, fields, schema_keys):
-                return {f: {"schema_key": schema_keys[i] if i < len(schema_keys) else f,
-                             "confidence": 0.9}
-                        for i, f in enumerate(fields)}
+                return {
+                    f: {
+                        "schema_key": schema_keys[i] if i < len(schema_keys) else f,
+                        "confidence": 0.9,
+                    }
+                    for i, f in enumerate(fields)
+                }
 
         llm = EmbedLLM()
         llm.initialize()
@@ -91,10 +128,19 @@ class TestLLMAdapterInterface:
         @plugin(category="llm_adapter", name="default-llm")
         class DefaultLLM(LLMAdapter):
             def get_metadata(self):
-                return PluginMetadata(name="default-llm", version="1.0",
-                                      author="T", description="", category="llm_adapter")
-            def map_fields(self, fields, context): return {}
-            def embed(self, fields, schema_keys): return {}
+                return PluginMetadata(
+                    name="default-llm",
+                    version="1.0",
+                    author="T",
+                    description="",
+                    category="llm_adapter",
+                )
+
+            def map_fields(self, fields, context):
+                return {}
+
+            def embed(self, fields, schema_keys):
+                return {}
 
         llm = DefaultLLM()
         assert llm.supports_model("gpt-4o") is False
@@ -108,6 +154,7 @@ class TestLLMAdapterInterface:
 
 # ── NoOpLLMAdapter ────────────────────────────────────────────────────────────
 
+
 class TestNoOpLLMAdapter:
     @pytest.fixture
     def adapter(self):
@@ -118,9 +165,11 @@ class TestNoOpLLMAdapter:
     def test_map_fields_passthrough(self, adapter):
         fields = ["investor_name", "email_address", "commitment_usd"]
         result = adapter.map_fields(fields, "LP form context")
-        assert result == {"investor_name": "investor_name",
-                          "email_address": "email_address",
-                          "commitment_usd": "commitment_usd"}
+        assert result == {
+            "investor_name": "investor_name",
+            "email_address": "email_address",
+            "commitment_usd": "commitment_usd",
+        }
 
     def test_map_fields_empty(self, adapter):
         assert adapter.map_fields([], "context") == {}
@@ -142,7 +191,7 @@ class TestNoOpLLMAdapter:
     def test_embed_more_fields_than_schema_keys(self, adapter):
         result = adapter.embed(["f1", "f2", "f3"], ["k1"])
         assert result["f1"]["schema_key"] == "k1"
-        assert result["f2"]["schema_key"] == "f2"   # falls back to field name
+        assert result["f2"]["schema_key"] == "f2"  # falls back to field name
         assert result["f3"]["schema_key"] == "f3"
 
     def test_embed_empty(self, adapter):
@@ -173,6 +222,7 @@ class TestNoOpLLMAdapter:
 
 # ── LiteLLMAdapter (without real litellm) ────────────────────────────────────
 
+
 class TestLiteLLMAdapterWithoutDep:
     """Test LiteLLMAdapter fallback behaviour when litellm is not installed."""
 
@@ -184,6 +234,7 @@ class TestLiteLLMAdapterWithoutDep:
     def test_map_fields_falls_back_to_passthrough_on_import_error(self):
         """If litellm is not installed, map_fields should return passthrough."""
         import unittest.mock as mock
+
         a = LiteLLMAdapter(config={"model": "openai/gpt-4o-mini"})
         a.initialize()
 
@@ -226,13 +277,20 @@ class TestLiteLLMAdapterWithoutDep:
 
 # ── OutputFormatterPlugin interface ───────────────────────────────────────────
 
+
 class TestOutputFormatterInterface:
     def test_can_instantiate_concrete_subclass(self):
         @plugin(category="output_formatter", name="test-formatter")
         class TestFormatter(OutputFormatterPlugin):
             def get_metadata(self):
-                return PluginMetadata(name="test-formatter", version="1.0",
-                                      author="T", description="", category="output_formatter")
+                return PluginMetadata(
+                    name="test-formatter",
+                    version="1.0",
+                    author="T",
+                    description="",
+                    category="output_formatter",
+                )
+
             def format(self, filled_pdf, field_map, **kwargs):
                 return {"pdf": filled_pdf, "fields": field_map}
 
@@ -246,8 +304,14 @@ class TestOutputFormatterInterface:
         @plugin(category="output_formatter", name="default-fmt")
         class DefaultFmt(OutputFormatterPlugin):
             def get_metadata(self):
-                return PluginMetadata(name="default-fmt", version="1.0",
-                                      author="T", description="", category="output_formatter")
+                return PluginMetadata(
+                    name="default-fmt",
+                    version="1.0",
+                    author="T",
+                    description="",
+                    category="output_formatter",
+                )
+
             def format(self, filled_pdf, field_map, **kwargs):
                 return filled_pdf
 
@@ -257,6 +321,7 @@ class TestOutputFormatterInterface:
 
 
 # ── JSONReportFormatter ───────────────────────────────────────────────────────
+
 
 class TestJSONReportFormatter:
     @pytest.fixture
@@ -274,8 +339,7 @@ class TestJSONReportFormatter:
         assert result["status"] == "ok"
 
     def test_format_status_partial_with_unfilled(self, formatter):
-        result = formatter.format(b"PDF", {"name": "Jane"},
-                                  unfilled_fields=["email", "phone"])
+        result = formatter.format(b"PDF", {"name": "Jane"}, unfilled_fields=["email", "phone"])
         assert result["status"] == "partial"
         assert result["unfilled_count"] == 2
         assert "email" in result["unfilled_fields"]
@@ -288,6 +352,7 @@ class TestJSONReportFormatter:
 
     def test_format_includes_b64_pdf(self, formatter):
         import base64
+
         result = formatter.format(b"PDF_BYTES", {})
         assert "pdf_b64" in result
         assert base64.b64decode(result["pdf_b64"]) == b"PDF_BYTES"
@@ -336,6 +401,7 @@ class TestJSONReportFormatter:
 
 # ── PassthroughFormatter ──────────────────────────────────────────────────────
 
+
 class TestPassthroughFormatter:
     @pytest.fixture
     def formatter(self):
@@ -364,13 +430,20 @@ class TestPassthroughFormatter:
 
 # ── DataConnectorPlugin interface ─────────────────────────────────────────────
 
+
 class TestDataConnectorInterface:
     def test_can_instantiate_concrete_subclass(self):
         @plugin(category="data_connector", name="test-connector")
         class TestConnector(DataConnectorPlugin):
             def get_metadata(self):
-                return PluginMetadata(name="test-connector", version="1.0",
-                                      author="T", description="", category="data_connector")
+                return PluginMetadata(
+                    name="test-connector",
+                    version="1.0",
+                    author="T",
+                    description="",
+                    category="data_connector",
+                )
+
             def fetch(self, record_id, **kwargs):
                 return {"investor_name": f"User {record_id}"}
 
@@ -383,8 +456,14 @@ class TestDataConnectorInterface:
         @plugin(category="data_connector", name="batch-connector")
         class BatchConnector(DataConnectorPlugin):
             def get_metadata(self):
-                return PluginMetadata(name="batch-connector", version="1.0",
-                                      author="T", description="", category="data_connector")
+                return PluginMetadata(
+                    name="batch-connector",
+                    version="1.0",
+                    author="T",
+                    description="",
+                    category="data_connector",
+                )
+
             def fetch(self, record_id, **kwargs):
                 return {"id": record_id}
 
@@ -397,9 +476,16 @@ class TestDataConnectorInterface:
         @plugin(category="data_connector", name="default-conn")
         class DefaultConn(DataConnectorPlugin):
             def get_metadata(self):
-                return PluginMetadata(name="default-conn", version="1.0",
-                                      author="T", description="", category="data_connector")
-            def fetch(self, record_id, **kwargs): return {}
+                return PluginMetadata(
+                    name="default-conn",
+                    version="1.0",
+                    author="T",
+                    description="",
+                    category="data_connector",
+                )
+
+            def fetch(self, record_id, **kwargs):
+                return {}
 
         c = DefaultConn()
         assert c.supports_source("salesforce") is False
@@ -409,15 +495,24 @@ class TestDataConnectorInterface:
 
 # ── DictConnector ─────────────────────────────────────────────────────────────
 
+
 class TestDictConnector:
     @pytest.fixture
     def connector(self):
-        c = DictConnector(config={
-            "data": {
-                "user_001": {"investor_name": "Jane Smith", "email": "jane@example.com"},
-                "user_002": {"investor_name": "John Doe",  "email": "john@example.com"},
+        c = DictConnector(
+            config={
+                "data": {
+                    "user_001": {
+                        "investor_name": "Jane Smith",
+                        "email": "jane@example.com",
+                    },
+                    "user_002": {
+                        "investor_name": "John Doe",
+                        "email": "john@example.com",
+                    },
+                }
             }
-        })
+        )
         c.initialize()
         return c
 
@@ -472,12 +567,13 @@ class TestDictConnector:
 
 # ── JSONFileConnector ─────────────────────────────────────────────────────────
 
+
 class TestJSONFileConnector:
     @pytest.fixture
     def json_file(self, tmp_path):
         data = {
             "user_001": {"investor_name": "Jane Smith", "email": "jane@example.com"},
-            "user_002": {"investor_name": "John Doe",  "email": "john@example.com"},
+            "user_002": {"investor_name": "John Doe", "email": "john@example.com"},
         }
         f = tmp_path / "investors.json"
         f.write_text(json.dumps(data))
@@ -530,16 +626,19 @@ class TestJSONFileConnector:
 
 # ── PluginManager find_ methods ───────────────────────────────────────────────
 
+
 class TestPluginManagerNewFindMethods:
     @pytest.fixture
     def full_manager(self):
         m = PluginManager()
-        m.registry.register_plugin(NoOpLLMAdapter,       "llm_adapter",      "noop-llm")
-        m.registry.register_plugin(LiteLLMAdapter,       "llm_adapter",      "litellm")
-        m.registry.register_plugin(JSONReportFormatter,  "output_formatter", "json-report")
-        m.registry.register_plugin(PassthroughFormatter, "output_formatter", "passthrough-formatter")
-        m.registry.register_plugin(DictConnector,        "data_connector",   "dict-connector")
-        m.registry.register_plugin(JSONFileConnector,    "data_connector",   "json-file-connector")
+        m.registry.register_plugin(NoOpLLMAdapter, "llm_adapter", "noop-llm")
+        m.registry.register_plugin(LiteLLMAdapter, "llm_adapter", "litellm")
+        m.registry.register_plugin(JSONReportFormatter, "output_formatter", "json-report")
+        m.registry.register_plugin(
+            PassthroughFormatter, "output_formatter", "passthrough-formatter"
+        )
+        m.registry.register_plugin(DictConnector, "data_connector", "dict-connector")
+        m.registry.register_plugin(JSONFileConnector, "data_connector", "json-file-connector")
         return m
 
     def test_find_llm_adapter_noop(self, full_manager):
@@ -615,6 +714,7 @@ class TestPluginManagerNewFindMethods:
 
 # ── Full pipeline: Sir's vision end-to-end ───────────────────────────────────
 
+
 class TestSirVisionEndToEnd:
     """
     Tests the full pipeline Sir envisioned:
@@ -630,15 +730,15 @@ class TestSirVisionEndToEnd:
         """
         # 1. Setup
         manager = PluginManager()
-        manager.registry.register_plugin(DictConnector,       "data_connector",   "dict-connector")
-        manager.registry.register_plugin(NoOpLLMAdapter,      "llm_adapter",      "noop-llm")
+        manager.registry.register_plugin(DictConnector, "data_connector", "dict-connector")
+        manager.registry.register_plugin(NoOpLLMAdapter, "llm_adapter", "noop-llm")
         manager.registry.register_plugin(JSONReportFormatter, "output_formatter", "json-report")
 
         # 2. Load investor data via connector
         data_store = {
             "investor_001": {
-                "investor_name":  "Jane Smith",
-                "email_address":  "jane@example.com",
+                "investor_name": "Jane Smith",
+                "email_address": "jane@example.com",
                 "commitment_usd": "500000",
             }
         }
@@ -684,14 +784,17 @@ class TestSirVisionEndToEnd:
                 def map_fields(self, fields, context):
                     return {field: self.call_my_llm(field, context) for field in fields}
         """
+
         @plugin(category="llm_adapter", name="my-custom-llm")
         class MyCustomLLM(LLMAdapter):
             """Custom LLM that appends _mapped to each field name."""
 
             def get_metadata(self):
                 return PluginMetadata(
-                    name="my-custom-llm", version="1.0.0",
-                    author="Your Team", description="My custom LLM",
+                    name="my-custom-llm",
+                    version="1.0.0",
+                    author="Your Team",
+                    description="My custom LLM",
                     category="llm_adapter",
                 )
 
@@ -704,8 +807,7 @@ class TestSirVisionEndToEnd:
 
             def embed(self, fields, schema_keys):
                 mapping = self.map_fields(fields, "")
-                return {f: {"schema_key": mapping[f], "confidence": 0.95}
-                        for f in fields}
+                return {f: {"schema_key": mapping[f], "confidence": 0.95} for f in fields}
 
         manager = PluginManager()
         manager.registry.register_plugin(MyCustomLLM, "llm_adapter", "my-custom-llm")
@@ -729,6 +831,7 @@ class TestSirVisionEndToEnd:
                     # Pull contact data from Salesforce
                     ...
         """
+
         @plugin(category="data_connector", name="salesforce-mock")
         class SalesforceConnector(DataConnectorPlugin):
             """Mock Salesforce connector for testing."""
@@ -736,15 +839,17 @@ class TestSirVisionEndToEnd:
             _MOCK_DB = {
                 "003xx000004TmiQ": {
                     "investor_name": "Jane Smith",
-                    "email":         "jane@salesforce-example.com",
-                    "account_type":  "Individual",
+                    "email": "jane@salesforce-example.com",
+                    "account_type": "Individual",
                 },
             }
 
             def get_metadata(self):
                 return PluginMetadata(
-                    name="salesforce-mock", version="1.0.0",
-                    author="Your Team", description="Mock Salesforce connector",
+                    name="salesforce-mock",
+                    version="1.0.0",
+                    author="Your Team",
+                    description="Mock Salesforce connector",
                     category="data_connector",
                 )
 

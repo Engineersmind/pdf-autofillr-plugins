@@ -8,12 +8,28 @@ Unit tests for:
 - MapperPlugin.get_mapping_confidence(), validate_mapping()
 - BasePlugin.tags, priority, repr, str
 """
+
 from __future__ import annotations
 
 import json
 import time
+
 import pytest
 
+from pdf_autofillr_plugins.decorators import cache_result, plugin, requires
+
+# from pdf_autofillr_plugins.interfaces import (
+#     ChunkerPlugin, EmbedderPlugin, FillerPlugin, TransformerPlugin,
+#     ValidatorPlugin, ExtractorPlugin, MapperPlugin, PluginMetadata,
+# )
+from pdf_autofillr_plugins.interfaces import (
+    ChunkerPlugin,
+    EmbedderPlugin,
+    FillerPlugin,
+    PluginMetadata,
+    TransformerPlugin,
+    ValidatorPlugin,
+)
 from pdf_autofillr_plugins.utils import (
     Timer,
     chunk_list,
@@ -28,22 +44,12 @@ from pdf_autofillr_plugins.utils import (
     sanitize_filename,
     truncate_string,
 )
-from pdf_autofillr_plugins.decorators import plugin, requires, cache_result
-
-# from pdf_autofillr_plugins.interfaces import (
-#     ChunkerPlugin, EmbedderPlugin, FillerPlugin, TransformerPlugin,
-#     ValidatorPlugin, ExtractorPlugin, MapperPlugin, PluginMetadata,
-# )
-
-from pdf_autofillr_plugins.interfaces import (
-    ChunkerPlugin, EmbedderPlugin, FillerPlugin, TransformerPlugin,
-    ValidatorPlugin, PluginMetadata,
-)
 
 # from pdf_autofillr_plugins.interfaces.base_plugin import BasePlugin
 
 
 # ── Utils ────────────────────────────────────────────────────────────────────
+
 
 class TestTimer:
     def test_measures_elapsed_time(self):
@@ -69,12 +75,14 @@ class TestSafeJson:
 
     def test_dumps_datetime(self):
         from datetime import datetime
+
         result = safe_json_dumps({"ts": datetime(2026, 1, 1)})
         assert "2026-01-01" in result
 
     def test_dumps_unknown_type(self):
         class Foo:
             pass
+
         result = safe_json_dumps({"obj": Foo()})
         assert result  # should not raise
 
@@ -162,11 +170,13 @@ class TestRetry:
 
     def test_retries_on_exception(self):
         call_count = [0]
+
         def flaky():
             call_count[0] += 1
             if call_count[0] < 3:
                 raise ValueError("not yet")
             return "ok"
+
         result = retry_with_backoff(flaky, max_retries=3, initial_delay=0.001)
         assert result == "ok"
         assert call_count[0] == 3
@@ -182,17 +192,20 @@ class TestRetry:
 
 # ── Decorators ───────────────────────────────────────────────────────────────
 
+
 class TestRequiresDecorator:
     def test_sets_dependencies_attribute(self):
         @requires("numpy", "pandas")
         class MyPlugin:
             pass
+
         assert MyPlugin._plugin_dependencies == ["numpy", "pandas"]
 
     def test_empty_dependencies(self):
         @requires()
         class NoDepPlugin:
             pass
+
         assert NoDepPlugin._plugin_dependencies == []
 
 
@@ -203,11 +216,24 @@ class TestCacheResultDecorator:
         @plugin(category="validator", name="cache-test-plugin")
         class CachePlugin(ValidatorPlugin):
             def get_metadata(self):
-                return PluginMetadata(name="cache-test-plugin", version="1.0",
-                                      author="T", description="", category="validator")
-            def supports_field_type(self, ft): return True
+                return PluginMetadata(
+                    name="cache-test-plugin",
+                    version="1.0",
+                    author="T",
+                    description="",
+                    category="validator",
+                )
+
+            def supports_field_type(self, ft):
+                return True
+
             def validate(self, name, value, rules=None, **kw):
-                return {"valid": True, "errors": [], "warnings": [], "validator": "cache-test-plugin"}
+                return {
+                    "valid": True,
+                    "errors": [],
+                    "warnings": [],
+                    "validator": "cache-test-plugin",
+                }
 
             @cache_result(ttl=60)
             def expensive_op(self, x):
@@ -222,15 +248,29 @@ class TestCacheResultDecorator:
 
 # ── Plugin interfaces — abstract method coverage ──────────────────────────────
 
+
 class TestChunkerInterface:
     def test_default_chunk_size(self):
         @plugin(category="chunker", name="test-chunker")
         class TestChunker(ChunkerPlugin):
             def get_metadata(self):
-                return PluginMetadata(name="test-chunker", version="1.0",
-                                      author="T", description="", category="chunker")
+                return PluginMetadata(
+                    name="test-chunker",
+                    version="1.0",
+                    author="T",
+                    description="",
+                    category="chunker",
+                )
+
             def chunk(self, pdf_path, chunk_size=None, **kw):
-                return [{"chunk_id": "1", "content": "text", "page_numbers": [1], "metadata": {}}]
+                return [
+                    {
+                        "chunk_id": "1",
+                        "content": "text",
+                        "page_numbers": [1],
+                        "metadata": {},
+                    }
+                ]
 
         c = TestChunker()
         c.initialize()
@@ -245,8 +285,14 @@ class TestChunkerInterface:
         @plugin(category="chunker", name="test-chunker-2")
         class TestChunker2(ChunkerPlugin):
             def get_metadata(self):
-                return PluginMetadata(name="test-chunker-2", version="1.0",
-                                      author="T", description="", category="chunker")
+                return PluginMetadata(
+                    name="test-chunker-2",
+                    version="1.0",
+                    author="T",
+                    description="",
+                    category="chunker",
+                )
+
             def chunk(self, pdf_path, chunk_size=None, **kw):
                 return []
 
@@ -260,11 +306,21 @@ class TestEmbedderInterface:
         @plugin(category="embedder", name="test-embedder")
         class TestEmbedder(EmbedderPlugin):
             def get_metadata(self):
-                return PluginMetadata(name="test-embedder", version="1.0",
-                                      author="T", description="", category="embedder")
+                return PluginMetadata(
+                    name="test-embedder",
+                    version="1.0",
+                    author="T",
+                    description="",
+                    category="embedder",
+                )
+
             def embed(self, pdf_path, metadata, output_path=None, **kw):
-                return {"output_path": output_path or "out.pdf",
-                        "embedded_keys": list(metadata.keys()), "embedder": "test-embedder"}
+                return {
+                    "output_path": output_path or "out.pdf",
+                    "embedded_keys": list(metadata.keys()),
+                    "embedder": "test-embedder",
+                }
+
             def check(self, pdf_path, **kw):
                 return {"has_metadata": True, "metadata": {}, "embedded_keys": []}
 
@@ -282,13 +338,24 @@ class TestFillerInterface:
         @plugin(category="filler", name="test-filler")
         class TestFiller(FillerPlugin):
             def get_metadata(self):
-                return PluginMetadata(name="test-filler", version="1.0",
-                                      author="T", description="", category="filler")
-            def supports_pdf_type(self, pdf_path): return True
+                return PluginMetadata(
+                    name="test-filler",
+                    version="1.0",
+                    author="T",
+                    description="",
+                    category="filler",
+                )
+
+            def supports_pdf_type(self, pdf_path):
+                return True
+
             def fill(self, pdf_path, data, output_path=None, **kw):
-                return {"output_path": output_path or "filled.pdf",
-                        "filled_fields": list(data.keys()), "unfilled_fields": [],
-                        "filler": "test-filler"}
+                return {
+                    "output_path": output_path or "filled.pdf",
+                    "filled_fields": list(data.keys()),
+                    "unfilled_fields": [],
+                    "filler": "test-filler",
+                }
 
         f = TestFiller()
         f.initialize()
@@ -306,9 +373,17 @@ class TestTransformerInterface:
         @plugin(category="transformer", name="test-transformer")
         class UpperCaseTransformer(TransformerPlugin):
             def get_metadata(self):
-                return PluginMetadata(name="test-transformer", version="1.0",
-                                      author="T", description="", category="transformer")
-            def supports_type(self, value_type): return value_type in {str}
+                return PluginMetadata(
+                    name="test-transformer",
+                    version="1.0",
+                    author="T",
+                    description="",
+                    category="transformer",
+                )
+
+            def supports_type(self, value_type):
+                return value_type in {str}
+
             def transform(self, value, transform_type=None, **kw):
                 return str(value).upper()
 
@@ -325,7 +400,10 @@ class TestTransformerInterface:
 
 class TestValidatorBatchMethod:
     def test_validate_batch(self):
-        from pdf_autofillr_plugins.builtin.validators.email_validator import EmailValidatorPlugin
+        from pdf_autofillr_plugins.builtin.validators.email_validator import (
+            EmailValidatorPlugin,
+        )
+
         v = EmailValidatorPlugin()
         v.initialize()
         fields = {
@@ -339,20 +417,29 @@ class TestValidatorBatchMethod:
 
 class TestExtractorDefaults:
     def test_validate_pdf_default_true(self):
-        from pdf_autofillr_plugins.builtin.extractors.passthrough_extractor import PassthroughExtractorPlugin
+        from pdf_autofillr_plugins.builtin.extractors.passthrough_extractor import (
+            PassthroughExtractorPlugin,
+        )
+
         e = PassthroughExtractorPlugin(config={"fields": []})
         e.initialize()
         assert e.validate_pdf("any.pdf") is True
 
     def test_get_supported_strategies_passthrough(self):
-        from pdf_autofillr_plugins.builtin.extractors.passthrough_extractor import PassthroughExtractorPlugin
+        from pdf_autofillr_plugins.builtin.extractors.passthrough_extractor import (
+            PassthroughExtractorPlugin,
+        )
+
         e = PassthroughExtractorPlugin()
         assert "passthrough" in e.get_supported_strategies()
 
 
 class TestMapperDefaults:
     def test_validate_mapping_default_true(self):
-        from pdf_autofillr_plugins.builtin.mappers.identity_mapper import IdentityMapperPlugin
+        from pdf_autofillr_plugins.builtin.mappers.identity_mapper import (
+            IdentityMapperPlugin,
+        )
+
         m = IdentityMapperPlugin()
         m.initialize()
         assert m.validate_mapping({"field": "val"}, {"field": "string"}) is True
@@ -360,46 +447,70 @@ class TestMapperDefaults:
 
 class TestBasePluginReprStr:
     def test_repr(self):
-        from pdf_autofillr_plugins.builtin.validators.email_validator import EmailValidatorPlugin
+        from pdf_autofillr_plugins.builtin.validators.email_validator import (
+            EmailValidatorPlugin,
+        )
+
         v = EmailValidatorPlugin()
         r = repr(v)
         assert "EmailValidatorPlugin" in r
         assert "email-validator" in r
 
     def test_str(self):
-        from pdf_autofillr_plugins.builtin.validators.email_validator import EmailValidatorPlugin
+        from pdf_autofillr_plugins.builtin.validators.email_validator import (
+            EmailValidatorPlugin,
+        )
+
         v = EmailValidatorPlugin()
         s = str(v)
         assert "email-validator" in s
         assert "1.0.0" in s
 
     def test_is_initialized_false_before_init(self):
-        from pdf_autofillr_plugins.builtin.validators.email_validator import EmailValidatorPlugin
+        from pdf_autofillr_plugins.builtin.validators.email_validator import (
+            EmailValidatorPlugin,
+        )
+
         v = EmailValidatorPlugin()
         assert v.is_initialized is False
 
     def test_is_initialized_true_after_init(self):
-        from pdf_autofillr_plugins.builtin.validators.email_validator import EmailValidatorPlugin
+        from pdf_autofillr_plugins.builtin.validators.email_validator import (
+            EmailValidatorPlugin,
+        )
+
         v = EmailValidatorPlugin()
         v.initialize()
         assert v.is_initialized is True
 
     def test_priority_property(self):
-        from pdf_autofillr_plugins.builtin.extractors.invoice_extractor import InvoiceExtractorPlugin
+        from pdf_autofillr_plugins.builtin.extractors.invoice_extractor import (
+            InvoiceExtractorPlugin,
+        )
+
         e = InvoiceExtractorPlugin()
         assert e.priority == 200
 
     def test_tags_property(self):
-        from pdf_autofillr_plugins.builtin.extractors.invoice_extractor import InvoiceExtractorPlugin
+        from pdf_autofillr_plugins.builtin.extractors.invoice_extractor import (
+            InvoiceExtractorPlugin,
+        )
+
         e = InvoiceExtractorPlugin()
         assert "invoice" in e.tags
 
     def test_get_config_value_default(self):
-        from pdf_autofillr_plugins.builtin.validators.email_validator import EmailValidatorPlugin
+        from pdf_autofillr_plugins.builtin.validators.email_validator import (
+            EmailValidatorPlugin,
+        )
+
         v = EmailValidatorPlugin()
         assert v.get_config_value("nonexistent_key", "fallback") == "fallback"
 
     def test_validate_config_default_true(self):
-        from pdf_autofillr_plugins.builtin.validators.email_validator import EmailValidatorPlugin
+        from pdf_autofillr_plugins.builtin.validators.email_validator import (
+            EmailValidatorPlugin,
+        )
+
         v = EmailValidatorPlugin()
         assert v.validate_config({"any": "config"}) is True

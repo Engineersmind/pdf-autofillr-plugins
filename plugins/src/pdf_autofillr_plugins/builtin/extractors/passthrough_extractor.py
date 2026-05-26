@@ -4,6 +4,7 @@ Built-in: PassthroughExtractorPlugin
 Returns fields as-is. Useful as a base / no-op extractor for testing.
 Registered under category="extractor", name="passthrough-extractor".
 """
+
 from __future__ import annotations
 
 from typing import Any, Dict, List, Optional

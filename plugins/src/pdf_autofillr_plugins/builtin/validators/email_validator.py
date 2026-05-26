@@ -4,13 +4,14 @@ Built-in: EmailValidatorPlugin
 Validates email address fields.
 Registered automatically under category="validator", name="email-validator".
 """
+
 from __future__ import annotations
 
 import re
 from typing import Any, Dict, Optional
 
 from pdf_autofillr_plugins.decorators import plugin
-from pdf_autofillr_plugins.interfaces import ValidatorPlugin, PluginMetadata
+from pdf_autofillr_plugins.interfaces import PluginMetadata, ValidatorPlugin
 
 
 @plugin(
@@ -38,8 +39,12 @@ class EmailValidatorPlugin(ValidatorPlugin):
     _EMAIL_RE = re.compile(r"^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$")
 
     _DISPOSABLE = {
-        "tempmail.com", "throwaway.email", "guerrillamail.com",
-        "mailinator.com", "yopmail.com", "sharklasers.com",
+        "tempmail.com",
+        "throwaway.email",
+        "guerrillamail.com",
+        "mailinator.com",
+        "yopmail.com",
+        "sharklasers.com",
     }
 
     _PERSONAL = {"gmail.com", "yahoo.com", "hotmail.com", "outlook.com", "icloud.com"}
@@ -55,7 +60,12 @@ class EmailValidatorPlugin(ValidatorPlugin):
         )
 
     def supports_field_type(self, field_type: str) -> bool:
-        return field_type.lower() in {"email", "email_address", "emailaddress", "e-mail"}
+        return field_type.lower() in {
+            "email",
+            "email_address",
+            "emailaddress",
+            "e-mail",
+        }
 
     def validate(
         self,

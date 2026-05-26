@@ -2,15 +2,22 @@
 Integration tests — full plugin lifecycle end-to-end.
 No external dependencies required.
 """
+
 import pytest
+
 # from pdf_autofillr_plugins import PluginManager, PluginRegistry, plugin
 from pdf_autofillr_plugins import PluginManager
+from pdf_autofillr_plugins.builtin.extractors.passthrough_extractor import (
+    PassthroughExtractorPlugin,
+)
+from pdf_autofillr_plugins.builtin.mappers.identity_mapper import IdentityMapperPlugin
+
 # from pdf_autofillr_plugins.interfaces import (
 #     ValidatorPlugin, ExtractorPlugin, MapperPlugin, PluginMetadata,
 # )
-from pdf_autofillr_plugins.builtin.validators.email_validator import EmailValidatorPlugin
-from pdf_autofillr_plugins.builtin.extractors.passthrough_extractor import PassthroughExtractorPlugin
-from pdf_autofillr_plugins.builtin.mappers.identity_mapper import IdentityMapperPlugin
+from pdf_autofillr_plugins.builtin.validators.email_validator import (
+    EmailValidatorPlugin,
+)
 
 
 class TestFullPipelineIntegration:
@@ -21,20 +28,20 @@ class TestFullPipelineIntegration:
 
     def _make_manager(self) -> PluginManager:
         m = PluginManager()
-        m.registry.register_plugin(EmailValidatorPlugin,       "validator", "email-validator")
+        m.registry.register_plugin(EmailValidatorPlugin, "validator", "email-validator")
         m.registry.register_plugin(PassthroughExtractorPlugin, "extractor", "passthrough-extractor")
-        m.registry.register_plugin(IdentityMapperPlugin,       "mapper",    "identity-mapper")
+        m.registry.register_plugin(IdentityMapperPlugin, "mapper", "identity-mapper")
         return m
 
     def test_extract_then_map_then_validate(self):
         raw_fields = [
-            {"name": "investor_name",  "value": "Jane Smith",        "confidence": 0.99},
-            {"name": "email_address",  "value": "jane@example.com",  "confidence": 0.98},
-            {"name": "commitment_usd", "value": "500000",             "confidence": 0.95},
+            {"name": "investor_name", "value": "Jane Smith", "confidence": 0.99},
+            {"name": "email_address", "value": "jane@example.com", "confidence": 0.98},
+            {"name": "commitment_usd", "value": "500000", "confidence": 0.95},
         ]
         schema = {
-            "investor_name":  "string",
-            "email_address":  "string",
+            "investor_name": "string",
+            "email_address": "string",
             "commitment_usd": "string",
         }
 

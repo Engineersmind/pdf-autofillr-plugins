@@ -1,9 +1,11 @@
 """Unit tests for built-in plugins: EmailValidator, PassthroughExtractor, IdentityMapper."""
 import pytest
-from pdf_autofillr_plugins.builtin.validators.email_validator import EmailValidatorPlugin
-from pdf_autofillr_plugins.builtin.extractors.passthrough_extractor import PassthroughExtractorPlugin
-from pdf_autofillr_plugins.builtin.mappers.identity_mapper import IdentityMapperPlugin, _to_snake
 
+from pdf_autofillr_plugins.builtin.extractors.passthrough_extractor import (
+    PassthroughExtractorPlugin,
+)
+from pdf_autofillr_plugins.builtin.mappers.identity_mapper import IdentityMapperPlugin, _to_snake
+from pdf_autofillr_plugins.builtin.validators.email_validator import EmailValidatorPlugin
 
 # ── EmailValidatorPlugin ──────────────────────────────────────────────────────
 

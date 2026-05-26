@@ -1,8 +1,8 @@
 """Unit tests for MLMapperPlugin, InvoiceExtractorPlugin, and CLI commands."""
 import pytest
-from pdf_autofillr_plugins.builtin.mappers.ml_mapper import MLMapperPlugin
-from pdf_autofillr_plugins.builtin.extractors.invoice_extractor import InvoiceExtractorPlugin
 
+from pdf_autofillr_plugins.builtin.extractors.invoice_extractor import InvoiceExtractorPlugin
+from pdf_autofillr_plugins.builtin.mappers.ml_mapper import MLMapperPlugin
 
 # ── MLMapperPlugin ────────────────────────────────────────────────────────────
 

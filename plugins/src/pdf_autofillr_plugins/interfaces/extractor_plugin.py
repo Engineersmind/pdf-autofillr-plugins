@@ -5,17 +5,18 @@ For custom PDF field extractors.
 """
 
 from abc import abstractmethod
-from typing import Dict, Any, List, Optional
+from typing import Any, Dict, List, Optional
+
 from pdf_autofillr_plugins.interfaces.base_plugin import BasePlugin, PluginMetadata
 
 
 class ExtractorPlugin(BasePlugin):
     """
     Base class for field extractor plugins.
-    
+
     Extractor plugins extract structured data from PDFs.
     """
-    
+
     @abstractmethod
     def extract(
         self,
@@ -25,12 +26,12 @@ class ExtractorPlugin(BasePlugin):
     ) -> Dict[str, Any]:
         """
         Extract fields from PDF.
-        
+
         Args:
             pdf_path: Path to PDF file (local or cloud URL)
             strategy: Extraction strategy (optional)
             **kwargs: Additional extractor-specific parameters
-            
+
         Returns:
             Dict with extracted data:
             {
@@ -40,43 +41,43 @@ class ExtractorPlugin(BasePlugin):
             }
         """
         pass
-    
+
     @abstractmethod
     def supports(self, pdf_path: str, **kwargs) -> bool:
         """
         Check if this plugin can handle the PDF.
-        
+
         Args:
             pdf_path: Path to PDF file
             **kwargs: Additional context
-            
+
         Returns:
             True if plugin can extract from this PDF
         """
         pass
-    
+
     def get_supported_strategies(self) -> List[str]:
         """
         Get list of extraction strategies supported by this plugin.
-        
+
         Returns:
             List of strategy names
         """
         return ["default"]
-    
+
     def validate_pdf(self, pdf_path: str) -> bool:
         """
         Validate that PDF is accessible and readable.
-        
+
         Args:
             pdf_path: Path to PDF file
-            
+
         Returns:
             True if valid
         """
         # Default: assume valid
         return True
-    
+
     def get_metadata(self) -> PluginMetadata:
         """Default metadata for extractors"""
         return PluginMetadata(
@@ -90,7 +91,7 @@ class ExtractorPlugin(BasePlugin):
 
 class ExtractorResult:
     """Helper class for extractor results"""
-    
+
     def __init__(
         self,
         fields: List[Dict[str, Any]],
@@ -102,7 +103,7 @@ class ExtractorResult:
         self.metadata = metadata or {}
         self.extractor = extractor
         self.confidence = confidence
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary"""
         result = {

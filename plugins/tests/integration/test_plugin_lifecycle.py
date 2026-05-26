@@ -3,14 +3,18 @@ Integration tests — full plugin lifecycle end-to-end.
 No external dependencies required.
 """
 import pytest
+
 # from pdf_autofillr_plugins import PluginManager, PluginRegistry, plugin
 from pdf_autofillr_plugins import PluginManager
+from pdf_autofillr_plugins.builtin.extractors.passthrough_extractor import (
+    PassthroughExtractorPlugin,
+)
+from pdf_autofillr_plugins.builtin.mappers.identity_mapper import IdentityMapperPlugin
+
 # from pdf_autofillr_plugins.interfaces import (
 #     ValidatorPlugin, ExtractorPlugin, MapperPlugin, PluginMetadata,
 # )
 from pdf_autofillr_plugins.builtin.validators.email_validator import EmailValidatorPlugin
-from pdf_autofillr_plugins.builtin.extractors.passthrough_extractor import PassthroughExtractorPlugin
-from pdf_autofillr_plugins.builtin.mappers.identity_mapper import IdentityMapperPlugin
 
 
 class TestFullPipelineIntegration:

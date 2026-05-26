@@ -9,21 +9,28 @@ And PluginManager.find_llm_adapter / find_output_formatter / find_data_connector
 from __future__ import annotations
 
 import json
+
 # import tempfile
 # import os
 import pytest
 
-from pdf_autofillr_plugins import plugin, PluginManager
-from pdf_autofillr_plugins.interfaces import (
-    LLMAdapter, OutputFormatterPlugin, DataConnectorPlugin, PluginMetadata,
-)
-from pdf_autofillr_plugins.builtin.llm_adapters.noop_llm_adapter import NoOpLLMAdapter
-from pdf_autofillr_plugins.builtin.llm_adapters.litellm_adapter import LiteLLMAdapter
-from pdf_autofillr_plugins.builtin.output_formatters.json_report_formatter import JSONReportFormatter
-from pdf_autofillr_plugins.builtin.output_formatters.passthrough_formatter import PassthroughFormatter
+from pdf_autofillr_plugins import PluginManager, plugin
 from pdf_autofillr_plugins.builtin.data_connectors.dict_connector import DictConnector
 from pdf_autofillr_plugins.builtin.data_connectors.json_file_connector import JSONFileConnector
-
+from pdf_autofillr_plugins.builtin.llm_adapters.litellm_adapter import LiteLLMAdapter
+from pdf_autofillr_plugins.builtin.llm_adapters.noop_llm_adapter import NoOpLLMAdapter
+from pdf_autofillr_plugins.builtin.output_formatters.json_report_formatter import (
+    JSONReportFormatter,
+)
+from pdf_autofillr_plugins.builtin.output_formatters.passthrough_formatter import (
+    PassthroughFormatter,
+)
+from pdf_autofillr_plugins.interfaces import (
+    DataConnectorPlugin,
+    LLMAdapter,
+    OutputFormatterPlugin,
+    PluginMetadata,
+)
 
 # ── LLMAdapter interface ──────────────────────────────────────────────────────
 

@@ -2,12 +2,15 @@
 Integration test — all 5 built-in plugins working together in a full pipeline.
 """
 import pytest
+
 from pdf_autofillr_plugins import PluginManager
-from pdf_autofillr_plugins.builtin.validators.email_validator import EmailValidatorPlugin
-from pdf_autofillr_plugins.builtin.extractors.passthrough_extractor import PassthroughExtractorPlugin
 from pdf_autofillr_plugins.builtin.extractors.invoice_extractor import InvoiceExtractorPlugin
+from pdf_autofillr_plugins.builtin.extractors.passthrough_extractor import (
+    PassthroughExtractorPlugin,
+)
 from pdf_autofillr_plugins.builtin.mappers.identity_mapper import IdentityMapperPlugin
 from pdf_autofillr_plugins.builtin.mappers.ml_mapper import MLMapperPlugin
+from pdf_autofillr_plugins.builtin.validators.email_validator import EmailValidatorPlugin
 
 
 @pytest.fixture

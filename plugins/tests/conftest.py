@@ -1,10 +1,11 @@
 """Shared fixtures for plugin tests."""
 import pytest
+
 from pdf_autofillr_plugins import PluginManager, PluginRegistry
-# from pdf_autofillr_plugins.interfaces.base_plugin import BasePlugin, PluginMetadata
-from pdf_autofillr_plugins.interfaces.base_plugin import PluginMetadata
 from pdf_autofillr_plugins.decorators import plugin
 
+# from pdf_autofillr_plugins.interfaces.base_plugin import BasePlugin, PluginMetadata
+from pdf_autofillr_plugins.interfaces.base_plugin import PluginMetadata
 
 # ── Minimal concrete implementations for testing ──────────────────────────────
 

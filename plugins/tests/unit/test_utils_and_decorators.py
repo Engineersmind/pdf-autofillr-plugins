@@ -12,8 +12,23 @@ from __future__ import annotations
 
 import json
 import time
+
 import pytest
 
+from pdf_autofillr_plugins.decorators import cache_result, plugin, requires
+
+# from pdf_autofillr_plugins.interfaces import (
+#     ChunkerPlugin, EmbedderPlugin, FillerPlugin, TransformerPlugin,
+#     ValidatorPlugin, ExtractorPlugin, MapperPlugin, PluginMetadata,
+# )
+from pdf_autofillr_plugins.interfaces import (
+    ChunkerPlugin,
+    EmbedderPlugin,
+    FillerPlugin,
+    PluginMetadata,
+    TransformerPlugin,
+    ValidatorPlugin,
+)
 from pdf_autofillr_plugins.utils import (
     Timer,
     chunk_list,
@@ -27,17 +42,6 @@ from pdf_autofillr_plugins.utils import (
     safe_json_loads,
     sanitize_filename,
     truncate_string,
-)
-from pdf_autofillr_plugins.decorators import plugin, requires, cache_result
-
-# from pdf_autofillr_plugins.interfaces import (
-#     ChunkerPlugin, EmbedderPlugin, FillerPlugin, TransformerPlugin,
-#     ValidatorPlugin, ExtractorPlugin, MapperPlugin, PluginMetadata,
-# )
-
-from pdf_autofillr_plugins.interfaces import (
-    ChunkerPlugin, EmbedderPlugin, FillerPlugin, TransformerPlugin,
-    ValidatorPlugin, PluginMetadata,
 )
 
 # from pdf_autofillr_plugins.interfaces.base_plugin import BasePlugin
@@ -339,13 +343,17 @@ class TestValidatorBatchMethod:
 
 class TestExtractorDefaults:
     def test_validate_pdf_default_true(self):
-        from pdf_autofillr_plugins.builtin.extractors.passthrough_extractor import PassthroughExtractorPlugin
+        from pdf_autofillr_plugins.builtin.extractors.passthrough_extractor import (
+            PassthroughExtractorPlugin,
+        )
         e = PassthroughExtractorPlugin(config={"fields": []})
         e.initialize()
         assert e.validate_pdf("any.pdf") is True
 
     def test_get_supported_strategies_passthrough(self):
-        from pdf_autofillr_plugins.builtin.extractors.passthrough_extractor import PassthroughExtractorPlugin
+        from pdf_autofillr_plugins.builtin.extractors.passthrough_extractor import (
+            PassthroughExtractorPlugin,
+        )
         e = PassthroughExtractorPlugin()
         assert "passthrough" in e.get_supported_strategies()
 
@@ -385,12 +393,16 @@ class TestBasePluginReprStr:
         assert v.is_initialized is True
 
     def test_priority_property(self):
-        from pdf_autofillr_plugins.builtin.extractors.invoice_extractor import InvoiceExtractorPlugin
+        from pdf_autofillr_plugins.builtin.extractors.invoice_extractor import (
+            InvoiceExtractorPlugin,
+        )
         e = InvoiceExtractorPlugin()
         assert e.priority == 200
 
     def test_tags_property(self):
-        from pdf_autofillr_plugins.builtin.extractors.invoice_extractor import InvoiceExtractorPlugin
+        from pdf_autofillr_plugins.builtin.extractors.invoice_extractor import (
+            InvoiceExtractorPlugin,
+        )
         e = InvoiceExtractorPlugin()
         assert "invoice" in e.tags
 

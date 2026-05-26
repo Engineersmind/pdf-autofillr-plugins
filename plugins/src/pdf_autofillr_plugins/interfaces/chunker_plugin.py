@@ -5,17 +5,18 @@ For custom PDF chunking strategies.
 """
 
 from abc import abstractmethod
-from typing import List, Dict, Any, Optional
+from typing import Any, Dict, List, Optional
+
 from pdf_autofillr_plugins.interfaces.base_plugin import BasePlugin, PluginMetadata
 
 
 class ChunkerPlugin(BasePlugin):
     """
     Base class for PDF chunker plugins.
-    
+
     Chunker plugins split PDFs into logical chunks for processing.
     """
-    
+
     @abstractmethod
     def chunk(
         self,
@@ -25,12 +26,12 @@ class ChunkerPlugin(BasePlugin):
     ) -> List[Dict[str, Any]]:
         """
         Chunk PDF into logical segments.
-        
+
         Args:
             pdf_path: Path to PDF file
             chunk_size: Target chunk size (optional)
             **kwargs: Additional chunker-specific parameters
-            
+
         Returns:
             List of chunks:
             [
@@ -44,31 +45,31 @@ class ChunkerPlugin(BasePlugin):
             ]
         """
         pass
-    
+
     def get_optimal_chunk_size(self, pdf_path: str) -> int:
         """
         Calculate optimal chunk size for this PDF.
-        
+
         Args:
             pdf_path: Path to PDF file
-            
+
         Returns:
             Optimal chunk size
         """
         return 1000  # Default: 1000 chars per chunk
-    
+
     def supports_chunking_strategy(self, strategy: str) -> bool:
         """
         Check if chunking strategy is supported.
-        
+
         Args:
             strategy: Chunking strategy name
-            
+
         Returns:
             True if supported
         """
         return strategy in ["page", "paragraph", "fixed"]
-    
+
     def get_metadata(self) -> PluginMetadata:
         """Default metadata for chunkers"""
         return PluginMetadata(

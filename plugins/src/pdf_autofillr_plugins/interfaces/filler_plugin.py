@@ -5,17 +5,18 @@ For custom PDF filling strategies.
 """
 
 from abc import abstractmethod
-from typing import Dict, Any, Optional, List
+from typing import Any, Dict, List, Optional
+
 from pdf_autofillr_plugins.interfaces.base_plugin import BasePlugin, PluginMetadata
 
 
 class FillerPlugin(BasePlugin):
     """
     Base class for PDF filler plugins.
-    
+
     Filler plugins fill PDFs with data.
     """
-    
+
     @abstractmethod
     def fill(
         self,
@@ -26,13 +27,13 @@ class FillerPlugin(BasePlugin):
     ) -> Dict[str, Any]:
         """
         Fill PDF with data.
-        
+
         Args:
             pdf_path: Path to template PDF
             data: Data to fill
             output_path: Path for output PDF (optional)
             **kwargs: Additional filler-specific parameters
-            
+
         Returns:
             Dict with results:
             {
@@ -43,32 +44,32 @@ class FillerPlugin(BasePlugin):
             }
         """
         pass
-    
+
     @abstractmethod
     def supports_pdf_type(self, pdf_path: str) -> bool:
         """
         Check if filler supports this PDF type.
-        
+
         Args:
             pdf_path: Path to PDF file
-            
+
         Returns:
             True if supported
         """
         pass
-    
+
     def get_fillable_fields(self, pdf_path: str) -> List[str]:
         """
         Get list of fillable fields in PDF.
-        
+
         Args:
             pdf_path: Path to PDF file
-            
+
         Returns:
             List of field names
         """
         return []
-    
+
     def validate_data(
         self,
         pdf_path: str,
@@ -76,16 +77,16 @@ class FillerPlugin(BasePlugin):
     ) -> Dict[str, Any]:
         """
         Validate that data can fill the PDF.
-        
+
         Args:
             pdf_path: Path to PDF file
             data: Data to validate
-            
+
         Returns:
             Validation results
         """
         return {"valid": True, "errors": []}
-    
+
     def get_metadata(self) -> PluginMetadata:
         """Default metadata for fillers"""
         return PluginMetadata(

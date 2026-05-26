@@ -10,7 +10,7 @@ import re
 from typing import Any, Dict, Optional
 
 from pdf_autofillr_plugins.decorators import plugin
-from pdf_autofillr_plugins.interfaces import ValidatorPlugin, PluginMetadata
+from pdf_autofillr_plugins.interfaces import PluginMetadata, ValidatorPlugin
 
 
 @plugin(

@@ -14,7 +14,6 @@ from typing import Any, Dict, List, Optional
 from pdf_autofillr_plugins.decorators import plugin
 from pdf_autofillr_plugins.interfaces import MapperPlugin, PluginMetadata
 
-
 # Default synonym table — maps common source field name variants to
 # canonical target names. Extend via config["synonyms"].
 _DEFAULT_SYNONYMS: Dict[str, str] = {

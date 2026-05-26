@@ -169,7 +169,7 @@ class PluginLoader:
 
         try:
             module = importlib.import_module(module_path)
-            plugin_class = getattr(module, class_name)
+            getattr(module, class_name)
             logger.info(
                 "PluginLoader: registered '%s' (%s) from %s",
                 name, category, module_path,

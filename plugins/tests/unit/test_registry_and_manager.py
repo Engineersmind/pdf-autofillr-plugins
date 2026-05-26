@@ -1,9 +1,9 @@
 """Unit tests for PluginRegistry, PluginManager, decorators, and BasePlugin."""
 # import pytest
-from pdf_autofillr_plugins import plugin, PluginManager, PluginRegistry, PluginMetadata
-# from pdf_autofillr_plugins.interfaces import ValidatorPlugin, ExtractorPlugin, MapperPlugin
-from pdf_autofillr_plugins.interfaces import ValidatorPlugin, ExtractorPlugin
+from pdf_autofillr_plugins import PluginManager, PluginMetadata, PluginRegistry, plugin
 
+# from pdf_autofillr_plugins.interfaces import ValidatorPlugin, ExtractorPlugin, MapperPlugin
+from pdf_autofillr_plugins.interfaces import ExtractorPlugin, ValidatorPlugin
 
 # ── Decorator ─────────────────────────────────────────────────────────────────
 

@@ -25,3 +25,7 @@ To submit a community plugin:
     2. Create a manifest JSON following the schema above
     3. Open a PR adding your manifest to this folder
 """
+
+from pdf_autofillr_plugins.registry.plugin_registry import PluginRegistry
+
+__all__ = ["PluginRegistry"]

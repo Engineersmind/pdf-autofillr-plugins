@@ -28,8 +28,8 @@ jobs:
       run:
         working-directory: plugins
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
@@ -44,8 +44,8 @@ jobs:
       run:
         working-directory: plugins
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
       - name: Verify version matches tag
@@ -55,7 +55,7 @@ jobs:
           echo "Tag=$TAG pyproject=$PKG"
           [ "$TAG" = "$PKG" ] || (echo "Version mismatch — bump pyproject.toml and __init__.py before tagging" && exit 1)
       - run: pip install build && python -m build
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: dist-pdf-autofillr-plugins
           path: plugins/dist/
@@ -68,7 +68,7 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: dist-pdf-autofillr-plugins
           path: dist/

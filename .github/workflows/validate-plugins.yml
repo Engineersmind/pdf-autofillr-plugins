@@ -1,0 +1,117 @@
+name: Validate Plugins
+
+on:
+  push:
+    branches-ignore: [main]
+    paths:
+      - 'plugins/src/pdf_autofillr_plugins/registry/**.json'
+      - 'plugins/plugin.schema.json'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'plugins/src/pdf_autofillr_plugins/registry/**.json'
+      - 'plugins/plugin.schema.json'
+
+jobs:
+  validate-manifests:
+    name: Validate plugin manifests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: plugins
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          pip install -e ".[dev]"
+          pip install jsonschema
+
+      - name: Validate all manifests against plugin.schema.json
+        run: |
+          python - <<'EOF'
+          import json
+          import sys
+          from pathlib import Path
+          import jsonschema
+
+          schema_path = Path("src/pdf_autofillr_plugins/plugin.schema.json")
+          registry_dir = Path("src/pdf_autofillr_plugins/registry")
+
+          if not schema_path.exists():
+              print("ERROR: plugin.schema.json not found")
+              sys.exit(1)
+
+          schema = json.loads(schema_path.read_text())
+          manifests = list(registry_dir.glob("*.json"))
+
+          if not manifests:
+              print("No community manifests found in registry/ — skipping")
+              sys.exit(0)
+
+          errors = []
+          for manifest_file in sorted(manifests):
+              try:
+                  manifest = json.loads(manifest_file.read_text())
+                  jsonschema.validate(instance=manifest, schema=schema)
+                  print(f"  ✓ {manifest_file.name}")
+              except jsonschema.ValidationError as e:
+                  errors.append(f"  ✗ {manifest_file.name}: {e.message}")
+              except Exception as e:
+                  errors.append(f"  ✗ {manifest_file.name}: {e}")
+
+          if errors:
+              print("\nValidation failures:")
+              for err in errors:
+                  print(err)
+              sys.exit(1)
+
+          print(f"\nAll {len(manifests)} manifest(s) valid.")
+          EOF
+
+      - name: Run plugin-specific tests
+        run: pytest tests/ -k "plugin" --tb=short -q
+
+  compatibility-check:
+    name: API compatibility check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: plugins
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install package
+        run: pip install -e ".[dev]"
+
+      - name: Check all interfaces importable
+        run: |
+          python - <<'EOF'
+          from pdf_autofillr_plugins.interfaces import (
+              ExtractorPlugin, MapperPlugin, ValidatorPlugin,
+              FillerPlugin, TransformerPlugin, ChunkerPlugin,
+              EmbedderPlugin, LLMAdapter, OutputFormatterPlugin,
+              DataConnectorPlugin,
+          )
+          from pdf_autofillr_plugins.hooks import (
+              PreExtractHook, PostExtractHook,
+              PreFillHook, PostFillHook, HookRegistry,
+          )
+          from pdf_autofillr_plugins.loader import PluginLoader
+          from pdf_autofillr_plugins import plugin, PluginRegistry, PluginManager
+          print("All interfaces and core components import cleanly.")
+          EOF

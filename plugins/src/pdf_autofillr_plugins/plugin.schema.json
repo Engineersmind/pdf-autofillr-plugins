@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "pdf-autofillr Plugin Manifest",
+  "description": "Schema for community-submitted plugin manifests",
+  "type": "object",
+  "required": ["name", "version", "author", "description", "category", "module", "class"],
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Unique plugin name (kebab-case)",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "minLength": 2,
+      "maxLength": 64
+    },
+    "version": {
+      "type": "string",
+      "description": "Semantic version (e.g. 1.0.0)",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "author": {
+      "type": "string",
+      "description": "Plugin author name or organisation",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "description": {
+      "type": "string",
+      "description": "Short description of what the plugin does",
+      "minLength": 10,
+      "maxLength": 256
+    },
+    "category": {
+      "type": "string",
+      "description": "Plugin category — must match a registered interface",
+      "enum": [
+        "extractor",
+        "mapper",
+        "validator",
+        "filler",
+        "transformer",
+        "chunker",
+        "embedder",
+        "llm_adapter",
+        "output_formatter",
+        "data_connector",
+        "hook"
+      ]
+    },
+    "module": {
+      "type": "string",
+      "description": "Dotted Python module path (e.g. my_package.my_plugin)",
+      "pattern": "^[a-zA-Z_][a-zA-Z0-9_.]*$"
+    },
+    "class": {
+      "type": "string",
+      "description": "Plugin class name inside the module",
+      "pattern": "^[A-Z][a-zA-Z0-9]*$"
+    },
+    "tags": {
+      "type": "array",
+      "description": "Optional tags for discovery and filtering",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      },
+      "maxItems": 10,
+      "uniqueItems": true
+    },
+    "requires": {
+      "type": "array",
+      "description": "Optional Python package dependencies (pip requirement strings)",
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 20
+    },
+    "priority": {
+      "type": "integer",
+      "description": "Plugin priority — higher wins when multiple plugins match (default 100)",
+      "minimum": 1,
+      "maximum": 1000,
+      "default": 100
+    },
+    "enabled": {
+      "type": "boolean",
+      "description": "Whether the plugin is active by default",
+      "default": true
+    },
+    "homepage": {
+      "type": "string",
+      "description": "Optional URL to plugin homepage or repo",
+      "format": "uri"
+    },
+    "license": {
+      "type": "string",
+      "description": "SPDX license identifier (e.g. MIT, Apache-2.0)",
+      "maxLength": 32
+    }
+  }
+}

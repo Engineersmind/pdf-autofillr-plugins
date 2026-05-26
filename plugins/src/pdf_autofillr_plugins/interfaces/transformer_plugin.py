@@ -18,9 +18,7 @@ class TransformerPlugin(BasePlugin):
     """
 
     @abstractmethod
-    def transform(
-        self, value: Any, transform_type: Optional[str] = None, **kwargs
-    ) -> Any:
+    def transform(self, value: Any, transform_type: Optional[str] = None, **kwargs) -> Any:
         """
         Transform a value.
 

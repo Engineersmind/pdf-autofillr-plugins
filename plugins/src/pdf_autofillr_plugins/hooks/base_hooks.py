@@ -50,9 +50,7 @@ class BaseHook(ABC):
         self.config = config or {}
 
     def __repr__(self) -> str:
-        return (
-            f"{self.__class__.__name__}(name='{self.name}', priority={self.priority})"
-        )
+        return f"{self.__class__.__name__}(name='{self.name}', priority={self.priority})"
 
 
 class PreExtractHook(BaseHook):

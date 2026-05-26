@@ -61,9 +61,7 @@ class TestEmailValidatorPlugin:
         assert r["valid"] is False
 
     def test_require_corporate_rule(self, validator):
-        r = validator.validate(
-            "email", "user@gmail.com", rules={"require_corporate": True}
-        )
+        r = validator.validate("email", "user@gmail.com", rules={"require_corporate": True})
         assert r["valid"] is True  # still valid
         assert len(r["warnings"]) > 0  # but warned
 

@@ -141,9 +141,7 @@ class BasePlugin(ABC):
         return self._initialized
 
     def __repr__(self) -> str:
-        return (
-            f"{self.__class__.__name__}(name='{self.name}', version='{self.version}')"
-        )
+        return f"{self.__class__.__name__}(name='{self.name}', version='{self.version}')"
 
     def __str__(self) -> str:
         return f"{self.name} v{self.version}"

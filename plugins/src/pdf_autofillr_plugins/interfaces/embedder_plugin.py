@@ -19,11 +19,7 @@ class EmbedderPlugin(BasePlugin):
 
     @abstractmethod
     def embed(
-        self,
-        pdf_path: str,
-        metadata: Dict[str, Any],
-        output_path: Optional[str] = None,
-        **kwargs
+        self, pdf_path: str, metadata: Dict[str, Any], output_path: Optional[str] = None, **kwargs
     ) -> Dict[str, Any]:
         """
         Embed metadata into PDF.

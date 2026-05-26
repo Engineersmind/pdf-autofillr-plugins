@@ -339,9 +339,7 @@ class TestJSONReportFormatter:
         assert result["status"] == "ok"
 
     def test_format_status_partial_with_unfilled(self, formatter):
-        result = formatter.format(
-            b"PDF", {"name": "Jane"}, unfilled_fields=["email", "phone"]
-        )
+        result = formatter.format(b"PDF", {"name": "Jane"}, unfilled_fields=["email", "phone"])
         assert result["status"] == "partial"
         assert result["unfilled_count"] == 2
         assert "email" in result["unfilled_fields"]
@@ -382,9 +380,7 @@ class TestJSONReportFormatter:
         assert result["formatter"] == "json-report"
 
     def test_config_disable_bytes(self):
-        f = JSONReportFormatter(
-            config={"include_pdf_bytes": False, "include_b64": False}
-        )
+        f = JSONReportFormatter(config={"include_pdf_bytes": False, "include_b64": False})
         f.initialize()
         result = f.format(b"PDF", {})
         assert "pdf_bytes" not in result
@@ -637,16 +633,12 @@ class TestPluginManagerNewFindMethods:
         m = PluginManager()
         m.registry.register_plugin(NoOpLLMAdapter, "llm_adapter", "noop-llm")
         m.registry.register_plugin(LiteLLMAdapter, "llm_adapter", "litellm")
-        m.registry.register_plugin(
-            JSONReportFormatter, "output_formatter", "json-report"
-        )
+        m.registry.register_plugin(JSONReportFormatter, "output_formatter", "json-report")
         m.registry.register_plugin(
             PassthroughFormatter, "output_formatter", "passthrough-formatter"
         )
         m.registry.register_plugin(DictConnector, "data_connector", "dict-connector")
-        m.registry.register_plugin(
-            JSONFileConnector, "data_connector", "json-file-connector"
-        )
+        m.registry.register_plugin(JSONFileConnector, "data_connector", "json-file-connector")
         return m
 
     def test_find_llm_adapter_noop(self, full_manager):
@@ -685,9 +677,7 @@ class TestPluginManagerNewFindMethods:
         assert formatter is not None
         assert formatter.name == "passthrough-formatter"
 
-    def test_find_output_formatter_no_format_returns_highest_priority(
-        self, full_manager
-    ):
+    def test_find_output_formatter_no_format_returns_highest_priority(self, full_manager):
         # json-report (100) beats passthrough-formatter (1)
         formatter = full_manager.find_output_formatter("")
         assert formatter is not None
@@ -740,13 +730,9 @@ class TestSirVisionEndToEnd:
         """
         # 1. Setup
         manager = PluginManager()
-        manager.registry.register_plugin(
-            DictConnector, "data_connector", "dict-connector"
-        )
+        manager.registry.register_plugin(DictConnector, "data_connector", "dict-connector")
         manager.registry.register_plugin(NoOpLLMAdapter, "llm_adapter", "noop-llm")
-        manager.registry.register_plugin(
-            JSONReportFormatter, "output_formatter", "json-report"
-        )
+        manager.registry.register_plugin(JSONReportFormatter, "output_formatter", "json-report")
 
         # 2. Load investor data via connector
         data_store = {
@@ -821,9 +807,7 @@ class TestSirVisionEndToEnd:
 
             def embed(self, fields, schema_keys):
                 mapping = self.map_fields(fields, "")
-                return {
-                    f: {"schema_key": mapping[f], "confidence": 0.95} for f in fields
-                }
+                return {f: {"schema_key": mapping[f], "confidence": 0.95} for f in fields}
 
         manager = PluginManager()
         manager.registry.register_plugin(MyCustomLLM, "llm_adapter", "my-custom-llm")

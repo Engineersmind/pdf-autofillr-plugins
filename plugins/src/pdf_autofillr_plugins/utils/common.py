@@ -214,9 +214,7 @@ def retry_with_backoff(
 
     if last_exc is not None:
         raise last_exc
-    raise RuntimeError(
-        "retry_with_backoff: all attempts failed with no exception captured"
-    )
+    raise RuntimeError("retry_with_backoff: all attempts failed with no exception captured")
 
 
 # ── Timer ─────────────────────────────────────────────────────────────────────

@@ -81,9 +81,7 @@ class StorageInterface(ABC):
         pass
 
     @abstractmethod
-    def upload_bytes(
-        self, data: bytes, key: str, metadata: Optional[Dict[str, str]] = None
-    ) -> str:
+    def upload_bytes(self, data: bytes, key: str, metadata: Optional[Dict[str, str]] = None) -> str:
         """
         Upload bytes to storage.
 

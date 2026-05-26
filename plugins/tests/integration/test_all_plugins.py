@@ -22,9 +22,7 @@ from pdf_autofillr_plugins.builtin.validators.email_validator import (
 def full_manager():
     m = PluginManager()
     m.registry.register_plugin(EmailValidatorPlugin, "validator", "email-validator")
-    m.registry.register_plugin(
-        PassthroughExtractorPlugin, "extractor", "passthrough-extractor"
-    )
+    m.registry.register_plugin(PassthroughExtractorPlugin, "extractor", "passthrough-extractor")
     m.registry.register_plugin(InvoiceExtractorPlugin, "extractor", "invoice-extractor")
     m.registry.register_plugin(IdentityMapperPlugin, "mapper", "identity-mapper")
     m.registry.register_plugin(MLMapperPlugin, "mapper", "ml-mapper")

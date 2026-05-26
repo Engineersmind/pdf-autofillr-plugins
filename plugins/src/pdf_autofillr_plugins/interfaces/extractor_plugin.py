@@ -18,9 +18,7 @@ class ExtractorPlugin(BasePlugin):
     """
 
     @abstractmethod
-    def extract(
-        self, pdf_path: str, strategy: Optional[str] = None, **kwargs
-    ) -> Dict[str, Any]:
+    def extract(self, pdf_path: str, strategy: Optional[str] = None, **kwargs) -> Dict[str, Any]:
         """
         Extract fields from PDF.
 

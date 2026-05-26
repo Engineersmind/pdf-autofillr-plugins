@@ -120,9 +120,7 @@ class IdentityMapperPlugin(MapperPlugin):
             "unmapped_fields": unmapped,
             "mapping_info": mapping_info,
             "mapper": "identity-mapper",
-            "confidence": (
-                sum(i["confidence"] for i in mapping_info) / total if total else 0.0
-            ),
+            "confidence": (sum(i["confidence"] for i in mapping_info) / total if total else 0.0),
             "coverage": len(mapped) / total if total else 0.0,
         }
 

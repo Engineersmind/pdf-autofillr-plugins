@@ -29,9 +29,7 @@ class TestFullPipelineIntegration:
     def _make_manager(self) -> PluginManager:
         m = PluginManager()
         m.registry.register_plugin(EmailValidatorPlugin, "validator", "email-validator")
-        m.registry.register_plugin(
-            PassthroughExtractorPlugin, "extractor", "passthrough-extractor"
-        )
+        m.registry.register_plugin(PassthroughExtractorPlugin, "extractor", "passthrough-extractor")
         m.registry.register_plugin(IdentityMapperPlugin, "mapper", "identity-mapper")
         return m
 
@@ -63,15 +61,11 @@ class TestFullPipelineIntegration:
 
         # Step 3: validate email
         validator = manager.load_plugin("email-validator", "validator")
-        result = validator.validate(
-            "email_address", mapping["mapped_fields"]["email_address"]
-        )
+        result = validator.validate("email_address", mapping["mapped_fields"]["email_address"])
         assert result["valid"] is True
 
     def test_invalid_email_caught_after_mapping(self):
-        raw_fields = [
-            {"name": "email_address", "value": "not-an-email", "confidence": 0.5}
-        ]
+        raw_fields = [{"name": "email_address", "value": "not-an-email", "confidence": 0.5}]
         schema = {"email_address": "string"}
 
         manager = self._make_manager()
@@ -84,9 +78,7 @@ class TestFullPipelineIntegration:
         mapping = mapper.map_fields(extraction["fields"], schema)
 
         validator = manager.load_plugin("email-validator", "validator")
-        result = validator.validate(
-            "email_address", mapping["mapped_fields"]["email_address"]
-        )
+        result = validator.validate("email_address", mapping["mapped_fields"]["email_address"])
         assert result["valid"] is False
 
     def test_plugin_lifecycle_init_and_shutdown(self):

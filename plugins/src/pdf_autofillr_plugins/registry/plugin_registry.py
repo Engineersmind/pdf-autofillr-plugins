@@ -211,9 +211,7 @@ class PluginRegistry:
             "version": getattr(plugin_class, "_plugin_version", "unknown"),
             "author": getattr(plugin_class, "_plugin_author", "unknown"),
             "description": getattr(plugin_class, "_plugin_description", ""),
-            "category": getattr(
-                plugin_class, "_plugin_category", category or "unknown"
-            ),
+            "category": getattr(plugin_class, "_plugin_category", category or "unknown"),
             "tags": getattr(plugin_class, "_plugin_tags", []),
             "enabled": getattr(plugin_class, "_plugin_enabled", True),
             "priority": getattr(plugin_class, "_plugin_priority", 100),

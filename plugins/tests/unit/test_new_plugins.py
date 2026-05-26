@@ -23,9 +23,7 @@ class TestMLMapperPlugin:
         assert result["mapped_fields"].get("firstName") == "Jane"
 
     def test_synonym_normalised_match(self, mapper):
-        fields = [
-            {"name": "email address", "value": "jane@example.com", "confidence": 0.9}
-        ]
+        fields = [{"name": "email address", "value": "jane@example.com", "confidence": 0.9}]
         result = mapper.map_fields(fields)
         # "email address" normalises to "email_address" which maps to "emailAddress"
         assert "emailAddress" in result["mapped_fields"]

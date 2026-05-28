@@ -3,6 +3,7 @@ Plugin benchmark metric calculations.
 
 Aggregates results from plugin_tasks.py into summary statistics.
 """
+
 from __future__ import annotations
 
 from typing import Any, Dict, List
@@ -53,7 +54,9 @@ def calculate_coverage_stats(results: List[Dict[str, Any]]) -> Dict[str, float]:
 
 def calculate_discovery_stats(results: List[Dict[str, Any]]) -> Dict[str, Any]:
     """Aggregate discovery timing."""
-    discoveries = [r for r in results if r.get("task") in ("discovery", "discovery_time")]
+    discoveries = [
+        r for r in results if r.get("task") in ("discovery", "discovery_time")
+    ]
     if not discoveries:
         return {}
     durations = [r["duration_ms"] for r in discoveries if "duration_ms" in r]

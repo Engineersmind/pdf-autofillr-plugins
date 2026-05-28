@@ -6,6 +6,7 @@ This is the default behaviour when no formatter is configured.
 
 Registered under category="output_formatter", name="passthrough-formatter".
 """
+
 from __future__ import annotations
 
 from typing import Any, Dict

@@ -68,6 +68,7 @@ rough_docs/
 CLAUDE.md
 z_useful_cmds.sh
 TODO.md
+plugins/src/pdf_autofillr_plugins/registry.py
 
 # ======================
 # Claude Code workspace — never commit

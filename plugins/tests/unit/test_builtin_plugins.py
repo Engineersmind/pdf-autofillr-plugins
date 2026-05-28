@@ -1,11 +1,20 @@
 """Unit tests for built-in plugins: EmailValidator, PassthroughExtractor, IdentityMapper."""
-import pytest
-from pdf_autofillr_plugins.builtin.validators.email_validator import EmailValidatorPlugin
-from pdf_autofillr_plugins.builtin.extractors.passthrough_extractor import PassthroughExtractorPlugin
-from pdf_autofillr_plugins.builtin.mappers.identity_mapper import IdentityMapperPlugin, _to_snake
 
+import pytest
+
+from pdf_autofillr_plugins.builtin.extractors.passthrough_extractor import (
+    PassthroughExtractorPlugin,
+)
+from pdf_autofillr_plugins.builtin.mappers.identity_mapper import (
+    IdentityMapperPlugin,
+    _to_snake,
+)
+from pdf_autofillr_plugins.builtin.validators.email_validator import (
+    EmailValidatorPlugin,
+)
 
 # ── EmailValidatorPlugin ──────────────────────────────────────────────────────
+
 
 class TestEmailValidatorPlugin:
     @pytest.fixture
@@ -46,14 +55,14 @@ class TestEmailValidatorPlugin:
         assert r["warnings"][0] == "Disposable email domain detected: tempmail.com"
 
     def test_allowed_domains_rule(self, validator):
-        r = validator.validate("email", "user@gmail.com",
-                               rules={"allowed_domains": ["company.com"]})
+        r = validator.validate(
+            "email", "user@gmail.com", rules={"allowed_domains": ["company.com"]}
+        )
         assert r["valid"] is False
 
     def test_require_corporate_rule(self, validator):
-        r = validator.validate("email", "user@gmail.com",
-                               rules={"require_corporate": True})
-        assert r["valid"] is True      # still valid
+        r = validator.validate("email", "user@gmail.com", rules={"require_corporate": True})
+        assert r["valid"] is True  # still valid
         assert len(r["warnings"]) > 0  # but warned
 
     def test_supports_email_field_types(self, validator):
@@ -75,6 +84,7 @@ class TestEmailValidatorPlugin:
 
 
 # ── PassthroughExtractorPlugin ────────────────────────────────────────────────
+
 
 class TestPassthroughExtractorPlugin:
     @pytest.fixture
@@ -124,6 +134,7 @@ class TestPassthroughExtractorPlugin:
 
 
 # ── IdentityMapperPlugin ──────────────────────────────────────────────────────
+
 
 class TestIdentityMapperPlugin:
     @pytest.fixture

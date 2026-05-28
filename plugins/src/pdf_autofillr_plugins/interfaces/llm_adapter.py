@@ -24,6 +24,7 @@ Official adapters (planned):
     pdf-autofillr-plugin-ollama     — local Ollama models
     pdf-autofillr-plugin-google     — Gemini
 """
+
 from __future__ import annotations
 
 from abc import abstractmethod

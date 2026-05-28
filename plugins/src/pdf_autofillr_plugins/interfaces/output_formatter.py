@@ -13,6 +13,7 @@ Sir's original vision::
         def format(self, filled_pdf: bytes, field_map: dict) -> dict:
             return {"pdf": filled_pdf, "report": field_map, "status": "ok"}
 """
+
 from __future__ import annotations
 
 from abc import abstractmethod
